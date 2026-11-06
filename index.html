@@ -1,0 +1,1462 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<title>ASDD Re-verification — AC 39 Rajinder Nagar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="config.js?v=2026-11-06-ac39"></script>
+<style>
+  :root{
+    --blue:#2f5fad; --teal:#1a5f55; --teal-2:#237467; --ink:#1d2433; --muted:#5d6676;
+    --line:#d5dbe3; --bg:#f3f5f8; --card:#fff; --zebra:#e6edf1;
+    --done:#e5f4ea; --done-ink:#1e7a43; --dirty:#e8a317; --err:#c0392b;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--bg);font-size:14px}
+  .topbar{background:var(--blue);color:#fff;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+  .topbar b{font-weight:700;letter-spacing:.2px}
+  .topbar span{opacity:.9;font-size:13px}
+  main{max-width:1500px;margin:0 auto;padding:18px 16px 110px}
+  h1{text-align:center;font-size:clamp(20px,3vw,30px);margin:6px 0 18px;font-weight:700}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:14px}
+  label.lbl{font-weight:600;display:block;margin-bottom:6px}
+  select,input[type=search]{font:inherit;border:1px solid #9aa5b4;border-radius:6px;padding:8px 10px;background:#fff;color:var(--ink)}
+  #bloSel{width:100%;max-width:560px;font-size:16px;font-weight:600}
+  .meta{margin-top:10px;color:var(--muted);font-size:13px}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+  .stat .v{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}
+  .stat .k{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+  .bar{height:6px;background:#e3e8ee;border-radius:3px;overflow:hidden;margin-top:6px}
+  .bar i{display:block;height:100%;background:var(--done-ink);width:0;transition:width .3s}
+  .filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .filters input[type=search]{flex:1 1 220px;min-width:180px}
+  .tablewrap{background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:auto}
+  table{border-collapse:collapse;width:100%}
+  th{background:var(--teal);color:#fff;font-weight:600;font-size:13px;padding:10px 8px;text-align:center;position:sticky;top:0;z-index:1;border-right:1px solid #2c7a6d}
+  td{padding:8px;text-align:center;border-bottom:1px solid var(--line);border-right:1px solid var(--line);vertical-align:middle}
+  tbody tr:nth-child(even){background:var(--zebra)}
+  tbody tr.done{background:var(--done)}
+  tbody tr.dirty td:first-child{box-shadow:inset 4px 0 0 var(--dirty)}
+  td select{min-width:130px;padding:6px 8px}
+  td select.empty{border-color:#c4472f;background:#fff7f5}
+  td.c-rem{min-width:260px;text-align:left}
+  td textarea.rem{width:100%;min-width:240px;min-height:64px;font:inherit;font-size:13px;border:1px solid #9aa5b4;border-radius:6px;padding:6px 8px;resize:vertical;background:#fff;color:var(--ink)}
+  td textarea.rem:disabled{background:#eef1f4;color:#8a929e;border-color:#c3cad3;cursor:not-allowed;resize:none;min-height:38px}
+  .remcnt{font-size:11px;font-weight:600;margin-top:2px;color:var(--muted)}
+  .remcnt.bad{color:var(--err)}
+  .remcnt .hint{color:var(--blue);font-weight:700}
+  td textarea.rem.need{border-color:#c4472f;background:#fff7f5}
+  #psTb td.rem-cell{text-align:left;font-size:12px;min-width:220px;white-space:normal}
+  td select.frozen{background:#eef1f4;color:#4a5260;border-color:#c3cad3;cursor:not-allowed;opacity:1}
+  tr.locked.dirty .lockmsg{color:#b26a00}
+  .lockmsg{font-size:12px;font-weight:600;color:var(--done-ink);margin-top:4px}
+  tr.lockerr .lockmsg{color:var(--err)}
+  tr.lockerr td.c-sel select{border-color:var(--err)}
+  .tag{display:inline-block;padding:2px 8px;border-radius:12px;font-size:12px;font-weight:600;white-space:nowrap}
+  .t-ps{background:#fdecc8;color:#7a5200}.t-ua{background:#e2e8f8;color:#2b4a8f}
+  .t-d{background:#eadbdb;color:#7d2b2b}.t-ae{background:#dff1e6;color:#1e6a3e}
+  .empty-msg{padding:40px;text-align:center;color:var(--muted)}
+  .savebar{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);box-shadow:0 -4px 16px rgba(0,0,0,.06);padding:10px 16px;display:none;z-index:5}
+  .savebar .in{max-width:1500px;margin:0 auto;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+  .btn{font:inherit;font-weight:700;border:0;border-radius:8px;padding:11px 22px;cursor:pointer;background:var(--teal);color:#fff;font-size:15px}
+  .btn:disabled{background:#9aa5b4;cursor:not-allowed}
+  .btn.ghost{background:transparent;color:var(--teal);border:1px solid var(--teal);padding:9px 16px;font-size:14px}
+  .markall{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .markall .note{font-size:13px;color:var(--muted);flex:1 1 240px}
+  .btn.danger{background:#b03a2e}
+  .btn.lockbtn{background:#5b2c83}
+  .btn.lockbtn:disabled{background:#9aa5b4}
+  .frozenbar{background:#f3ecfa;border-color:#b79bd6;color:#3d1c5c;font-weight:600}
+  .frozenbar .sub{font-weight:400;font-size:13px;margin-top:2px}
+  .psfrozen td textarea.rem{background:#eef1f4!important;cursor:not-allowed}
+  .psfrozen td select{background:#eef1f4!important;color:#4a5260;border-color:#c3cad3;cursor:not-allowed}
+  #msg{font-weight:600}
+  #msg.ok{color:var(--done-ink)} #msg.err{color:var(--err)} #msg.warn{color:#9a6400}
+  .banner{background:#fff4d6;border:1px solid #e8c56a;color:#6b4e00;padding:10px 14px;border-radius:8px;margin-bottom:14px;display:none}
+  .loader{padding:40px;text-align:center;color:var(--muted)}
+  .hide{display:none!important}
+  .lbl-m{display:none}
+  footer{text-align:center;margin:28px 0 8px}
+  .topright{display:flex;align-items:center;gap:14px}
+  .adminlink{font:inherit;font-size:16px;font-weight:700;color:var(--blue);background:#fff;border:0;border-radius:8px;padding:9px 22px;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.2);letter-spacing:.3px}
+  .adminlink:hover{background:#eaf0fb}
+  .aerolink{background:#ffd54a;color:#4a3800}
+  .aerolink:hover{background:#ffe27a}
+  .replink{background:#1a5f55;color:#fff}
+  .replink:hover{background:#237568}
+  .replink:disabled{opacity:.75;cursor:wait}
+  .topbtns{display:flex;gap:8px}
+  #aeroSel{width:100%;font:inherit;font-size:15px;border:1px solid #9aa5b4;border-radius:6px;padding:9px 10px;margin-bottom:10px}
+  .overall{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin-bottom:12px}
+  .overall .lbl{display:flex;justify-content:space-between;font-weight:600;margin-bottom:6px}
+  .overall .big{height:14px;background:#e3e8ee;border-radius:7px;overflow:hidden}
+  .overall .big i{display:block;height:100%;background:var(--done-ink);transition:width .4s}
+  @media (max-width:600px){ .topbar{flex-wrap:wrap;padding:10px 12px;gap:8px} .topbar b{font-size:13px;line-height:1.3;width:100%} .topbar .topsub{display:none} .topright{margin-left:auto} .adminlink{font-size:14px;padding:8px 14px;flex-shrink:0} }
+  .modal{position:fixed;inset:0;background:rgba(20,28,40,.45);display:flex;align-items:center;justify-content:center;z-index:20;padding:16px}
+  .modal .box{background:#fff;border-radius:12px;padding:20px;width:100%;max-width:340px;box-shadow:0 10px 40px rgba(0,0,0,.2)}
+  .modal h3{margin:0 0 14px}
+  .modal input{width:100%;font:inherit;border:1px solid #9aa5b4;border-radius:6px;padding:9px 10px;margin-bottom:10px}
+  .modal .row{display:flex;gap:8px;justify-content:flex-end;margin-top:4px}
+  .modal .err{color:var(--err);font-size:13px;min-height:18px;margin-bottom:6px}
+  .adm-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+  .adm-head h2{margin:0;font-size:20px}
+  #admTable{font-variant-numeric:tabular-nums}
+  #admTable th{cursor:pointer;white-space:nowrap}
+  #admTable td.l{text-align:left}
+  #admTable tr.zero td{color:#a33}
+  a.pslink{color:var(--blue);font-weight:700;text-decoration:underline;cursor:pointer}
+  #admTb tr.zero td a.pslink{color:var(--blue)}
+  #psTb td.l{text-align:left}
+  #psTb tr.done{background:var(--done)}
+  .ans-r{font-weight:600;color:var(--done-ink)} .ans-nr{font-weight:600;color:#8a4b00} .ans-none{color:#9aa5b4}
+  .pbar{width:110px;height:8px;background:#e3e8ee;border-radius:4px;overflow:hidden;display:inline-block;vertical-align:middle;margin-right:6px}
+  .pbar i{display:block;height:100%;background:var(--done-ink)}
+
+  /* Phone: each elector becomes a card */
+  @media (max-width: 820px){
+    main{padding:12px 12px 120px}
+    .stats{grid-template-columns:repeat(3,1fr);gap:6px}
+    .stat{padding:6px 8px}.stat .v{font-size:17px}.stat .k{font-size:10px}
+    .filters select{flex:1 1 40%}
+    #work .tablewrap{background:transparent;border:0;overflow:visible}
+    #work table,#work tbody,#work tr,#work td{display:block;width:100%}
+    #work thead{display:none}
+    #work tbody tr{background:var(--card)!important;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;padding:10px 12px;display:grid;grid-template-columns:1fr 1fr;gap:4px 10px}
+    #work tbody tr.done{background:var(--done)!important;border-color:#9fd3b1}
+    #work tbody tr.dirty{box-shadow:inset 4px 0 0 var(--dirty)}
+    #work tbody tr.dirty td:first-child{box-shadow:none}
+    #work td{border:0;padding:2px 0;text-align:left;font-size:13px}
+    #work td.c-dist,#work td.c-acno,#work td.c-acname,#work td.c-part{display:none}
+    #work td.c-sn{grid-column:1/-1;font-size:12px;color:var(--muted)}
+    #work td.c-name{grid-column:1/-1;font-size:16px;font-weight:700}
+    #work td.c-rel{grid-column:1/-1}
+    #work td.c-sel{grid-column:1/-1;padding-top:6px}
+    #work td select{width:100%;font-size:15px;padding:9px}
+    #work td.c-rem{grid-column:1/-1;padding-top:6px;min-width:0}
+    #work td textarea.rem{min-width:0;font-size:15px}
+    .lbl-m{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;margin-bottom:2px}
+  }
+  /* ---- Template-style controls (Residing/Pending list, EPIC search, Part No., Mark Selected As) ---- */
+  .ctrl{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin-bottom:14px;display:flex;flex-direction:column;align-items:center;gap:12px}
+  .ctrl-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:14px 26px}
+  .ctrl label{font-weight:700;font-size:17px;margin-right:6px}
+  .ctrl .ctrl-red{color:#d9534f;font-weight:500;font-size:18px}
+  .ctrl select{font-size:15px;font-weight:600;padding:6px 8px}
+  #bloSel{min-width:260px;max-width:420px}
+  .epicbox{display:inline-flex;gap:8px;align-items:center}
+  .epicbox input{font:inherit;font-size:15px;border:1px solid #9aa5b4;border-radius:4px;padding:7px 10px;width:230px}
+  .btn-epic{font:inherit;font-weight:700;font-size:15px;background:#d4d42a;color:#111;border:1px solid #a9a91e;border-radius:3px;padding:7px 14px;cursor:pointer}
+  .btn-epic:hover{background:#e2e23c}
+  .ctrl-item{display:inline-flex;align-items:center}
+  .selbar{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin:0 2px 8px;font-size:13px}
+  .selbar label{font-weight:600;display:flex;gap:6px;align-items:center;cursor:pointer}
+  #mainTable th{font-size:12px;line-height:1.25;min-width:70px}
+  #mainTable td{font-size:13px}
+  #mainTable td.c-sn{font-weight:700;min-width:44px}
+  #mainTable td.c-chk,#mainTable th.c-chk{min-width:34px;width:34px}
+  #mainTable td.c-long{min-width:150px;max-width:220px;white-space:normal;word-break:break-word}
+  #mainTable td.c-date{min-width:96px;font-size:12px}
+  #mainTable td.c-na{color:#9aa5b4}
+  #mainTable td.c-bad{background:#fff1ee;color:var(--err);font-weight:600;font-size:12px}
+  .st-r{font-weight:700;color:var(--done-ink)} .st-a{font-weight:700;color:#8a4b00}
+  .editlink{font:inherit;font-weight:700;color:var(--blue);background:none;border:0;cursor:pointer;text-decoration:underline;padding:4px}
+  .rowmsg{font-size:11px;font-weight:600;margin-top:2px;color:var(--done-ink)}
+  tr.dirty .rowmsg{color:#b26a00} tr.lockerr .rowmsg{color:var(--err)} tr.incomplete .rowmsg{color:var(--err)}
+  tbody tr.sel{outline:2px solid #2f5fad;outline-offset:-2px}
+  /* Edit form */
+  .modal .box.edbox{max-width:560px;max-height:92vh;overflow:auto}
+  .edinfo{font-size:13px;color:var(--muted);margin:-6px 0 12px;line-height:1.45}
+  .edinfo b{color:var(--ink)}
+  .fld{margin-bottom:12px}
+  .fld label{display:block;font-weight:600;font-size:13px;margin-bottom:4px}
+  .fld i{color:var(--err);font-style:normal}
+  .fld.off i.req{display:none}
+  .fld.nodreq i{display:none}
+  .fld select,.fld input[type=text],.fld input[type=tel],.fld textarea{width:100%;font:inherit;font-size:15px;border:1px solid #9aa5b4;border-radius:6px;padding:8px 10px;background:#fff;color:var(--ink);margin:0}
+  .fld textarea{resize:vertical;min-height:52px}
+  .fld.off label{color:#9aa5b4}
+  .fld select:disabled,.fld input:disabled,.fld textarea:disabled{background:#eef1f4;color:#8a929e;border-color:#c3cad3;cursor:not-allowed}
+  .fld.bad select,.fld.bad input,.fld.bad textarea{border-color:var(--err);background:#fff7f5}
+  .ferr{color:var(--err);font-size:12px;font-weight:600;min-height:0}
+  .dates{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+  .chip{display:inline-flex;align-items:center;gap:4px;background:#e2e8f8;color:#2b4a8f;border-radius:14px;padding:3px 4px 3px 10px;font-size:13px;font-weight:600}
+  .chip button{border:0;background:#c9d4ef;color:#2b4a8f;border-radius:50%;width:20px;height:20px;line-height:18px;cursor:pointer;font-weight:700;padding:0}
+  .dates input[type=date]{font:inherit;font-size:16px;border:1px solid #2f5fad;border-radius:6px;padding:6px 8px;margin:0;width:auto;min-width:150px;min-height:38px;background:#fff;color:var(--ink);-webkit-appearance:none;appearance:none}
+  .dates input[type=date].picked{border-color:var(--done-ink);background:#eef8f1}
+  .dates .addd{font:inherit;font-size:13px;font-weight:700;border:1px solid var(--teal);color:var(--teal);background:#fff;border-radius:6px;padding:5px 10px;cursor:pointer}
+  /* Desktop: ONE scroll area for the whole page (the area between the top bar and the save bar).
+     The table has no scroll box of its own, so there is a single vertical scroll bar;
+     the header row still stays frozen at the top while scrolling, and the horizontal
+     scroll bar sits at the bottom of the screen, just above the save bar. */
+  @media (min-width: 821px){
+    html,body{height:100%;overflow:hidden}
+    body{display:flex;flex-direction:column}
+    .topbar{flex:none}
+    main{flex:1 1 auto;min-height:0;overflow:auto;max-width:none;width:100%;padding-bottom:24px}
+    main>*{max-width:1500px;margin-left:auto;margin-right:auto}
+    .savebar{position:static;flex:none}
+    #work .tablewrap,#adminView .tablewrap{overflow:visible;width:fit-content;min-width:100%;max-width:none}
+    #work th,#adminView th{box-shadow:inset 0 -1px 0 #2c7a6d}
+  }
+  .bulkbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .bulkbar .note{font-size:13px;color:var(--muted);flex:1 1 240px}
+  .bulkbtns{display:flex;gap:10px;flex-wrap:wrap}
+  .bulkbtns .btn{background:#2f5fad;padding:10px 16px;font-size:14px}
+  .bkmode label{display:flex;justify-content:flex-start;gap:10px;align-items:flex-start;text-align:left;font-weight:500;font-size:14px;margin-bottom:8px;cursor:pointer}
+  .bkmode input{margin:3px 0 0;flex:none;width:auto}
+  @media (max-width:820px){ .bulkbtns{width:100%} .bulkbtns .btn{flex:1} }
+  .oldrem{font-size:12px;background:#fff8e6;border:1px solid #f0d58a;border-radius:6px;padding:6px 8px;margin-bottom:10px;color:#6b4e00}
+  @media (max-width: 820px){
+    .ctrl label{font-size:14px} .ctrl .ctrl-red{font-size:15px}
+    .ctrl-row{gap:10px;width:100%} .ctrl-item{width:100%;justify-content:space-between} .ctrl-item select{flex:1;min-width:0;max-width:none}
+    .epicbox{width:100%} .epicbox input{flex:1;width:auto;min-width:0}
+    #work td.c-chk{grid-column:1/-1;padding:0}
+    #work td.c-long,#work td.c-date{max-width:none;min-width:0}
+    #work td.c-wide{grid-column:1/-1}
+    #work td.c-edit{grid-column:1/-1;text-align:right}
+    #work td.c-edit .editlink{font-size:15px;background:var(--teal);color:#fff;text-decoration:none;border-radius:8px;padding:8px 22px}
+  }
+</style>
+</head>
+<body>
+<div class="topbar"><b>District CENTRAL · AC 39 – RAJINDER NAGAR</b><div class="topright"><span class="topsub">BLO data entry · ASDD re-verification</span><span class="topbtns"><button class="adminlink replink" id="dailyBtn" type="button" title="Download today's ASDD re-verification progress report (PDF)">Daily Report</button><button class="adminlink aerolink" id="aeroBtn" type="button">Supervisor Login</button><button class="adminlink" id="adminBtn" type="button">Admin</button></span></div></div>
+<main>
+  <h1>Status of Re-verification of ASDD Electors</h1>
+  <div id="cfgBanner" class="banner">Setup pending: the Google Sheet link is not set in <code>config.js</code>, so data can't be saved yet.</div>
+
+  <div class="ctrl" id="selPanel">
+    <div class="ctrl-row">
+      <label class="ctrl-red" for="fShow">Residing/ Pending List:</label>
+      <select id="fShow">
+        <option value="">All</option>
+        <option value="Residing">Residing</option>
+        <option value="ASDD">ASDD</option>
+        <option value="pending">Pending</option>
+        <option value="done">Completed</option>
+      </select>
+    </div>
+    <div class="ctrl-row">
+      <span class="epicbox"><input type="search" id="q" placeholder="Enter EPIC No" autocomplete="off"><button class="btn-epic" id="qBtn" type="button">Search By EPIC</button></span>
+      <span class="ctrl-item"><label for="bloSel">Select Part No.:</label>
+        <select id="bloSel"><option value="">-- Select --</option></select></span>
+    </div>
+    <div class="meta" id="partMeta"></div>
+  </div>
+
+  <div id="work" class="hide">
+    <div class="stats">
+      <div class="stat"><div class="k">Total electors</div><div class="v" id="sTotal">0</div></div>
+      <div class="stat"><div class="k">Completed</div><div class="v" id="sDone">0</div><div class="bar"><i id="sBar"></i></div></div>
+      <div class="stat"><div class="k">Pending</div><div class="v" id="sPend">0</div></div>
+      <div class="stat"><div class="k">Residing</div><div class="v" id="sRes">0</div></div>
+      <div class="stat"><div class="k">ASDD</div><div class="v" id="sAsdd">0</div></div>
+      <div class="stat"><div class="k">Form-6 obtained</div><div class="v" id="sF6">0</div></div>
+    </div>
+
+    <div class="panel frozenbar hide" id="frozenBar"></div>
+
+    <div class="panel bulkbar">
+      <span class="note">Same visit date for all your electors? Set it here once instead of opening each elector.</span>
+      <span class="bulkbtns">
+        <button class="btn" type="button" id="bulkD1">📅 Date of Enumeration</button>
+        <button class="btn" type="button" id="bulkD2">📅 Date of Re-visit</button>
+      </span>
+    </div>
+    <div class="selbar"><span class="meta" id="shown" style="margin:0 0 0 auto"></span></div>
+
+    <div class="tablewrap">
+      <table id="mainTable">
+        <thead><tr>
+          <th>S.No.</th><th>District Name</th><th>AC NO</th><th>AC Name</th><th>Name of the Elector</th><th>Epic No.</th>
+          <th>Relation Type</th><th>Relation Name</th><th>Part No</th><th>Serial No</th>
+          <th>Date(s) of visit by BLO during Enumeration Phase</th>
+          <th>Status of Elector in the ASDD List</th>
+          <th>Date(s) of visit by BLO during Re-verification</th>
+          <th>Status of ASDD Elector during Re-verification by BLOs (Residing/ASDD)</th>
+          <th>If Found Residing, Reason for not submitting EF during Enumeration Phase</th>
+          <th>If found Residing &amp; eligible for Enrolment, Form-6 Obtained or Not (Yes/No)</th>
+          <th>If found Residing &amp; eligible for Enrolment, but Form-6 Not obtained, Reason thereof</th>
+          <th>If Form-6 Refused, Whether refused by Elector/Relative (Mention Name)</th>
+          <th>If Form-6 Refused, Whether refused by Elector/Relative (Mention Mobile Number)</th>
+          <th>Edit</th>
+        </tr></thead>
+        <tbody id="tb"></tbody>
+      </table>
+      <div id="loader" class="loader hide">Loading electors…</div>
+      <div id="none" class="empty-msg hide">No electors match these filters.</div>
+    </div>
+  </div>
+
+  <section id="adminView" class="hide">
+    <div class="adm-head">
+      <h2 id="admTitle">Admin · BLO-wise progress</h2>
+      <span style="display:flex;gap:8px">
+        <button class="btn ghost" id="admRefresh" type="button">Refresh</button>
+        <button class="btn ghost" id="admExit" type="button">Logout</button>
+      </span>
+    </div>
+    <div id="admListView">
+    <div class="overall"><div class="lbl"><span id="ovLbl">Overall progress</span><span id="ovPct">0%</span></div><div class="big"><i id="ovBar"></i></div></div>
+    <div class="stats" id="admStats"></div>
+    <div class="panel filters">
+      <select id="admMode" class="hide" title="Which progress to show">
+        <option value="">Re-verification progress</option>
+      </select>
+      <input type="search" id="admQ" placeholder="Search PS no., BLO or part name">
+      <select id="admF"><option value="">All BLOs</option><option value="zero">Not started</option><option value="part">In progress</option><option value="pzero">In Progress (ZERO)</option><option value="full">Completed 100%</option></select>
+      <select id="admOrd" class="hide" title="Order of In-progress BLOs (also used in the PDF)">
+        <option value="asc">Progress: Ascending (lowest first)</option>
+        <option value="desc">Progress: Descending (highest first)</option>
+      </select>
+      <button class="btn" id="admPdf" type="button" style="background:#b03a2e;padding:8px 16px;font-size:14px">Download PDF</button>
+      <button class="btn" id="admRemPdf" type="button" style="background:#1a5f55;padding:8px 16px;font-size:14px" title="Every Residing elector with all re-verification details, PS-wise">All Residing PDF</button>
+      <span class="meta" id="admMsg" style="margin:0"></span>
+    </div>
+    <div class="tablewrap"><table id="admTable">
+      <thead id="admHead"><tr>
+        <th data-s="ps">PS No</th><th data-s="blo">BLO Name</th><th data-s="part">Part Name</th><th data-s="n">ASDD Total</th>
+        <th data-s="done">Completed</th><th data-s="pct">Progress</th><th data-s="residing">Residing</th><th data-s="notResiding">ASDD</th><th data-s="f6yes">Form-6 Yes</th><th data-s="f6no">Form-6 No</th>
+      </tr></thead>
+      <tbody id="admTb"></tbody>
+    </table></div>
+    </div>
+
+    <div id="admPSView" class="hide">
+      <div class="panel" style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+        <div><button class="btn ghost" id="psBack" type="button">← All BLOs</button></div>
+        <div style="flex:1;min-width:220px"><b id="psTitle" style="font-size:17px"></b><div class="meta" id="psMeta" style="margin-top:2px"></div></div>
+        <span style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn" id="psXlsx" type="button">Download Excel</button>
+          <button class="btn" id="psPdf" type="button" style="background:#b03a2e">Download PDF</button>
+        </span>
+      </div>
+      <div class="stats" id="psStats"></div>
+      <div class="panel filters">
+        <input type="search" id="psQ" placeholder="Search name, EPIC or serial no.">
+        <select id="psF"><option value="done">Submitted only</option><option value="">All electors</option><option value="pending">Not yet submitted</option></select>
+        <select id="psR"><option value="">Residing + ASDD</option><option>Residing</option><option>ASDD</option></select>
+        <span class="meta" id="psShown" style="margin:0"></span>
+      </div>
+      <div class="tablewrap"><table id="psTable">
+        <thead><tr><th>S.N.</th><th>Name of the Elector</th><th>Epic No.</th><th>Relation Type</th><th>Relation Name</th><th>Serial No</th>
+          <th>Date(s) of visit – Enumeration</th><th>Status of Elector in the ASDD List</th><th>Date(s) of visit – Re-verification</th>
+          <th>Status during Re-verification (Residing/ASDD)</th><th>Reason for not submitting EF</th><th>Form-6 Obtained (Yes/No)</th>
+          <th>Reason Form-6 not obtained</th><th>Refused by (Name)</th><th>Refused by (Mobile)</th></tr></thead>
+        <tbody id="psTb"></tbody>
+      </table>
+      <div id="psNone" class="empty-msg hide">No entries to show.</div></div>
+    </div>
+  </section>
+
+</main>
+
+<div class="modal hide" id="bkModal"><form class="box edbox" id="bkForm" autocomplete="off" novalidate>
+  <h3 id="bkTitle">Set date for all electors</h3>
+  <div class="edinfo" id="bkInfo"></div>
+  <div class="fld"><label id="bkLbl">Date of visit</label>
+    <div class="dates" id="bkD"></div>
+    <div class="ferr" id="bkErr"></div></div>
+  <div class="fld bkmode">
+    <label><input type="radio" name="bkMode" value="empty" checked> Only electors where this date is not filled yet</label>
+    <label><input type="radio" name="bkMode" value="all"> All electors of this PS (replaces dates already filled)</label>
+  </div>
+  <div class="row"><button class="btn ghost" type="button" id="bkCancel">Cancel</button><button class="btn" type="submit" id="bkApply">Apply</button></div>
+</form></div>
+
+<div class="modal hide" id="edModal"><form class="box edbox" id="edForm" autocomplete="off" novalidate>
+  <h3 id="edTitle">Edit</h3>
+  <div class="edinfo" id="edInfo"></div>
+
+  <div class="fld"><label>Date of visit by BLO during Enumeration Phase <i>*</i> <small>(one date only)</small></label>
+    <div class="dates" id="edD1"></div>
+    <div class="ferr" data-for="edD1"></div></div>
+  <div class="fld"><label>Date of visit by BLO during Re-verification <i>*</i> <small>(one date only)</small></label>
+    <div class="dates" id="edD2"></div>
+    <div class="ferr" data-for="edD2"></div></div>
+
+  <div class="fld"><label for="edS">Status of ASDD Elector during Re-verification by BLOs (Residing/ASDD) <i>*</i></label>
+    <select id="edS"><option value="">-- Select --</option><option>Residing</option><option>ASDD</option></select>
+    <div class="ferr" data-for="edS"></div></div>
+
+  <div class="fld"><label for="edR1">If Found Residing, Reason for not submitting EF during Enumeration Phase <i class="req">*</i></label>
+    <textarea id="edR1" maxlength="200" rows="2"></textarea>
+    <div class="ferr" data-for="edR1"></div></div>
+
+  <div class="fld"><label for="edF">If found Residing &amp; eligible for Enrolment, Form-6 Obtained or Not (Yes/No) <i class="req">*</i></label>
+    <select id="edF"><option value="">-- Select --</option><option>Yes</option><option>No</option></select>
+    <div class="ferr" data-for="edF"></div></div>
+
+  <div class="fld"><label for="edR2">If found Residing &amp; eligible for Enrolment, but Form-6 Not obtained, Reason thereof <i class="req">*</i></label>
+    <textarea id="edR2" maxlength="200" rows="2"></textarea>
+    <div class="ferr" data-for="edR2"></div></div>
+
+  <div class="fld"><label for="edN">If Form-6 Refused, Whether refused by Elector/Relative (Mention Name) <i class="req">*</i></label>
+    <input type="text" id="edN" maxlength="100">
+    <div class="ferr" data-for="edN"></div></div>
+
+  <div class="fld"><label for="edM">If Form-6 Refused, Whether refused by Elector/Relative (Mention Mobile Number) <i class="req">*</i></label>
+    <input type="tel" id="edM" maxlength="10" inputmode="numeric" placeholder="10-digit mobile number">
+    <div class="ferr" data-for="edM"></div></div>
+
+  <div class="oldrem hide" id="edOld"></div>
+  <div class="row"><button class="btn ghost" type="button" id="edCancel">Cancel</button><button class="btn" type="submit" id="edSave">Save</button></div>
+</form></div>
+<div class="modal hide" id="aeroModal"><form class="box" id="aeroForm" autocomplete="off">
+  <h3>Supervisor Login</h3>
+  <select id="aeroSel"><option value="">— Select your name —</option></select>
+  <div class="err" id="aerr"></div>
+  <div class="row"><button class="btn ghost" type="button" id="acancel">Cancel</button><button class="btn" type="submit">Open</button></div>
+</form></div>
+
+
+<div class="savebar" id="savebar"><div class="in">
+  <span id="msg">No unsaved changes.</span>
+  <span style="display:flex;gap:10px;align-items:center">
+    <button class="btn ghost" id="reload" type="button">Reload from sheet</button>
+    <button class="btn" id="save" type="button" disabled>Submit</button>
+    <button class="btn lockbtn" id="freeze" type="button" style="display:none" disabled title="Lock your entries for good – no changes possible afterwards">🔒 Freeze</button>
+  </span>
+</div></div>
+
+<script>
+(function(){
+  const URL_ = (window.SCRIPT_URL||'').trim();
+  const hasBackend = /^https:\/\/script\.google(usercontent)?\.com\//.test(URL_) || /^\/api\//.test(URL_);   // Google Sheet script or the Oracle API
+  if(!hasBackend) document.getElementById('cfgBanner').style.display='block';
+
+  const $ = id => document.getElementById(id);
+  // On desktop the page scrolls inside <main>, on mobile the window scrolls — reset both
+  const toTop = () => { window.scrollTo(0,0); const m = document.querySelector('main'); if(m) m.scrollTop = 0; };
+  // One elector's answer:
+  //  0 Status during re-verification (Residing / ASDD)       1 Form-6 obtained (Yes / No)
+  //  2 Date(s) of visit – Enumeration phase                  3 Date(s) of visit – Re-verification
+  //  4 If Residing: reason for not submitting EF             5 If Form-6 No: reason thereof
+  //  6 If Form-6 refused: refused by (name)                  7 If Form-6 refused: refused by (mobile)
+  //  8 old Remarks from the earlier version (read-only, shown as a hint)
+  const NF = 8;
+  let blos = [], cur = null, rows = [], ans = {}, saved = {}, dirty = new Set(), busy = false, errEp = new Set();
+  let selected = new Set(), shownEps = [];
+
+  const store = {
+    get(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } },
+    set(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} },
+    del(k){ try{ localStorage.removeItem(k); }catch(e){} }
+  };
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const tagCls = s => s==='Permanently Shifted'?'t-ps':s==='Untraceable/Absent'?'t-ua':s==='Death'?'t-d':'t-ae';
+  const setMsg = (t, cls) => { const m=$('msg'); m.textContent=t; m.className=cls||''; };
+
+  const blank = () => Array(NF + 1).fill('');
+  // Any stored/drafted answer -> 9 strings. Old "Not Residing" is now "ASDD".
+  const pad = x => { const a = blank(); (x||[]).forEach((v,i) => { if(i <= NF) a[i] = v == null ? '' : String(v); });
+    if(a[0]==='Not Residing') a[0] = 'ASDD'; return a; };
+  // The 8 answer values exactly as they will be saved (fields that do not apply are emptied)
+  function norm(x){
+    const a = pad(x).slice(0, NF).map(v => String(v).trim());
+    if(a[0]==='ASDD'){ a[1]=a[4]=a[5]=a[6]=a[7]=''; }                    // ASDD: only the dates are kept
+    else if(a[0]==='Residing' && a[1]==='Yes'){ a[5]=a[6]=a[7]=''; }      // Form-6 obtained: no refusal details
+    else if(!a[0]){ a[1]=a[4]=a[5]=a[6]=a[7]=''; }
+    return a;
+  }
+  const splitDates = s => String(s||'').split(',').map(x => x.trim()).filter(Boolean);
+  const MOB_RE = /^[6-9]\d{9}$/;
+  // Missing / wrong fields of an answer, keyed by the edit-form field id
+  function problems(x){
+    const a = norm(x), e = {};
+    if(!a[2]) e.edD1 = 'Required – add the visit date';
+    else if(splitDates(a[2]).length > 1) e.edD1 = 'Only one date allowed – remove the extra date(s)';
+    if(!a[3]) e.edD2 = 'Required – add the visit date';
+    else if(splitDates(a[3]).length > 1) e.edD2 = 'Only one date allowed – remove the extra date(s)';
+    if(!a[0]) e.edS = 'Select Residing or ASDD';
+    if(a[0]==='Residing'){
+      if(!a[4]) e.edR1 = 'Required when Residing';
+      if(!a[1]) e.edF = 'Select Yes or No';
+      if(a[1]==='No'){
+        if(!a[5]) e.edR2 = 'Required when Form-6 is No';
+        if(!a[6]) e.edN = 'Required when Form-6 is No';
+        if(!MOB_RE.test(a[7])) e.edM = a[7] ? 'Enter a valid 10-digit mobile number' : 'Required when Form-6 is No';
+      }
+    }
+    return e;
+  }
+  const isComplete = a => !!a && !Object.keys(problems(a)).length;
+  const sameAns = (x, y) => { const a = norm(x), b = norm(y); return a.every((v,i) => v === b[i]); };
+
+  async function getJSON(u){ const r = await fetch(u, {cache:'no-store'}); if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); }
+  const sleep = ms => new Promise(r => setTimeout(r, ms));
+  // Calls the Google Sheet script, quietly retrying (with growing, randomised waits) if it is busy or the network blips.
+  async function backend(body, onRetry, getUrl){
+    const waits = [1500, 3000, 6000, 10000];
+    for(let i = 0; ; i++){
+      try{
+        const r = body ? await fetch(URL_, {method:'POST', body}) : await fetch(getUrl, {cache:'no-store'});
+        if(!r.ok) throw new Error('HTTP '+r.status);
+        const out = await r.json();
+        if(out.ok === false && (out.busy || /too many|busy|timed out|exceeded|try again/i.test(out.error||''))) throw new Error(out.error || 'Server busy');
+        return out;
+      }catch(e){
+        if(i >= waits.length) throw e;
+        if(onRetry) onRetry(i+1);
+        await sleep(waits[i] + Math.random()*1500);
+      }
+    }
+  }
+  const backendGet = (u, onRetry) => backend(null, onRetry, u);
+
+  const BLOS_FALLBACK = [{"ps":1,"blo":"VISHNU","part":"PANDAV NAGAR","n":461},{"ps":2,"blo":"HALMA KHATOON","part":"PANDAV NAGAR","n":371},{"ps":3,"blo":"MADHU SUDAN","part":"PANDAV NAGAR","n":276},{"ps":4,"blo":"UMESH KUMAR MEENA","part":"PANDAV NAGAR","n":305},{"ps":5,"blo":"VIRENDER","part":"PANDAV NAGAR","n":419},{"ps":6,"blo":"ASHA YADAV","part":"PANDAV NAGAR","n":390},{"ps":7,"blo":"AMARNATH CHAUHAN","part":"PANDAV NAGAR","n":591},{"ps":8,"blo":"GULSHAN KUMAR","part":"PANDAV NAGAR","n":431},{"ps":9,"blo":"AMIR KHAN","part":"PANDAV NAGAR","n":404},{"ps":10,"blo":"MANISH ANAND","part":"PANDAV NAGAR","n":468},{"ps":11,"blo":"AARTI KHORWAL","part":"KAROL BAGH PUSA ROAD","n":91},{"ps":12,"blo":"MEENAKSHI","part":"KAROL BAGH PUSA ROAD","n":267},{"ps":13,"blo":"JITENDER KUMAR BAIRWA","part":"KAROL BAGH","n":111},{"ps":14,"blo":"PRADEEP KUMAR","part":"KAROL BAGH","n":138},{"ps":15,"blo":"ARVIND","part":"KAROL BAGH","n":325},{"ps":16,"blo":"SONIA GAUTAM","part":"KAROL BAGH","n":206},{"ps":17,"blo":"KRISHNA DHILLOD","part":"KAROL BAGH","n":325},{"ps":18,"blo":"BHUPENDER","part":"KAROL BAGH","n":197},{"ps":19,"blo":"MANOJ KR YADAV","part":"KAROL BAGH","n":168},{"ps":20,"blo":"KULKDEEP SINGH","part":"KAROL BAGH","n":298},{"ps":21,"blo":"GEETIKA","part":"KAROL BAGH","n":322},{"ps":22,"blo":"SHASHI BALA","part":"KAROL BAGH","n":106},{"ps":23,"blo":"MANJU","part":"KAROL BAGH","n":538},{"ps":24,"blo":"ANJU NARANG","part":"KAROL BAGH","n":269},{"ps":25,"blo":"SHIKHA KUMAR","part":"RAJINDER NAGAR","n":62},{"ps":26,"blo":"RANJEETA KAKAR","part":"RAJINDER NAGAR","n":254},{"ps":27,"blo":"HINA BALI","part":"RAJINDER NAGAR","n":338},{"ps":28,"blo":"GURPREET KAUR","part":"RAJINDER NAGAR","n":115},{"ps":29,"blo":"NITISH KUMAR","part":"RAJINDER NAGAR","n":390},{"ps":30,"blo":"GEETA TANEJA","part":"RAJINDER NAGAR","n":81},{"ps":31,"blo":"MOHINI NAGPAL","part":"RAJINDER NAGAR","n":132},{"ps":32,"blo":"SWEETY GROVER","part":"RAJINDER NAGAR","n":184},{"ps":33,"blo":"YOGESH KUMAR","part":"RAJINDER NAGAR","n":324},{"ps":34,"blo":"ANIL SHARMA","part":"RAJINDER NAGAR","n":149},{"ps":35,"blo":"POONAM ARYA","part":"RAJINDER NAGAR","n":287},{"ps":36,"blo":"KRISHN MOHAN KANDPAL","part":"RAJINDER NAGAR","n":154},{"ps":37,"blo":"PARVEEN RELAN","part":"RAJINDER NAGAR","n":135},{"ps":38,"blo":"NIVEDITA CHAWLA","part":"RAJINDER NAGAR","n":343},{"ps":39,"blo":"DHARMA","part":"RAJINDER NAGAR","n":222},{"ps":40,"blo":"USHA","part":"RAJINDER NAGAR","n":446},{"ps":41,"blo":"PREETI KEDIA","part":"RAJINDER NAGAR","n":205},{"ps":42,"blo":"ATRIKA ARORA","part":"RAJINDER NAGAR","n":218},{"ps":43,"blo":"LIABA","part":"RAJINDER NAGAR","n":314},{"ps":44,"blo":"PAWAN","part":"RAJINDER NAGAR","n":336},{"ps":45,"blo":"JASHOBANTA MALIK","part":"RAJINDER NAGAR","n":280},{"ps":46,"blo":"KAJAL TANWAR","part":"RAJINDER NAGAR","n":233},{"ps":47,"blo":"DEEPTI MOHINDRU","part":"RAJINDER NAGAR","n":421},{"ps":48,"blo":"SAKET VIHARI","part":"RAJINDER NAGAR","n":219},{"ps":49,"blo":"SHAILJA SHARMA","part":"RAJINDER NAGAR","n":217},{"ps":50,"blo":"VINOD KUMAR","part":"PUSA INSTITUTE","n":49},{"ps":51,"blo":"JAGAT SINGH","part":"PUSA INSTITUTE","n":342},{"ps":52,"blo":"VIKAS SHARMA","part":"PUSA INSTITUTE","n":345},{"ps":53,"blo":"ADARSH PATEL","part":"NARAINA","n":663},{"ps":54,"blo":"SHER BAHADUR SINGH","part":"LOHA MANDI NARAINA","n":475},{"ps":55,"blo":"VIJAY CHAWLA","part":"LOHA MANDI NARAINA","n":896},{"ps":56,"blo":"PANKAJ KUMAR SINGH","part":"NARAINA","n":760},{"ps":57,"blo":"VINOD KUMAR","part":"NARAINA","n":944},{"ps":58,"blo":"RAJENDER SINGH","part":"KRISHI KUNJ","n":142},{"ps":59,"blo":"LALIT KUMAR","part":"KRISHI KUNJ","n":316},{"ps":60,"blo":"Monti Kumar","part":"J J COLONY INDERPURI","n":308},{"ps":61,"blo":"MANJU DEVI","part":"J J COLONY INDERPURI","n":426},{"ps":62,"blo":"GIRDHARI LAL","part":"J J COLONY INDERPURI","n":444},{"ps":63,"blo":"ASHA RAM MEENA","part":"J J COLONY INDERPURI","n":259},{"ps":64,"blo":"CHANCHAL","part":"J J COLONY INDERPURI","n":359},{"ps":65,"blo":"USHA","part":"J J COLONY INDERPURI","n":425},{"ps":66,"blo":"RITA RANI","part":"J J COLONY INDERPURI","n":450},{"ps":67,"blo":"SANTOSH","part":"J J COLONY INDERPURI","n":370},{"ps":68,"blo":"RAJ KUMARI","part":"J J COLONY INDERPURI","n":423},{"ps":69,"blo":"DURGA DEVI","part":"J J COLONY INDERPURI","n":494},{"ps":70,"blo":"SAMIM AHMAD","part":"J J COLONY INDERPURI","n":403},{"ps":71,"blo":"SUMAN","part":"J J COLONY INDERPURI","n":360},{"ps":72,"blo":"NISHU","part":"J J COLONY INDERPURI","n":471},{"ps":73,"blo":"CHANCHAL KUMARI","part":"J J COLONY INDERPURI","n":404},{"ps":74,"blo":"SONALI","part":"J J COLONY INDERPURI","n":520},{"ps":75,"blo":"BABITA","part":"J J COLONY INDERPURI","n":151},{"ps":76,"blo":"BABU LAL","part":"J J COLONY INDERPURI","n":342},{"ps":77,"blo":"LAXMI","part":"J J COLONY INDERPURI","n":439},{"ps":78,"blo":"SUSHILA","part":"J J COLONY INDERPURI","n":307},{"ps":79,"blo":"SHARDA","part":"J J COLONY INDERPURI","n":258},{"ps":80,"blo":"BANWARI LAL","part":"J J COLONY INDERPURI","n":425},{"ps":81,"blo":"Munendra Singh","part":"J J COLONY INDERPURI","n":569},{"ps":82,"blo":"PUSHPA RANI","part":"J J COLONY INDERPURI","n":139},{"ps":83,"blo":"SANJEEV KUMAR PASWAN","part":"J J COLONY INDERPURI","n":554},{"ps":84,"blo":"VEENA","part":"J J COLONY INDERPURI","n":541},{"ps":85,"blo":"JASBIR KAUR","part":"J J COLONY INDERPURI","n":279},{"ps":86,"blo":"RENU","part":"J J COLONY INDERPURI","n":412},{"ps":87,"blo":"KRISHNA","part":"J J COLONY INDERPURI","n":235},{"ps":88,"blo":"VEENA KIRAR","part":"J J COLONY INDERPURI","n":575},{"ps":89,"blo":"AAKASH KOTNALA","part":"J J COLONY INDERPURI","n":319},{"ps":90,"blo":"VIKRAM SINGH","part":"INDERPURI","n":163},{"ps":91,"blo":"POOJA SHARMA","part":"INDERPURI","n":221},{"ps":92,"blo":"REKHA","part":"INDERPURI","n":139},{"ps":93,"blo":"NEERU SHARMA","part":"INDERPURI","n":341},{"ps":94,"blo":"NILU SINHA","part":"INDERPURI","n":269},{"ps":95,"blo":"ANSHU GUPTA","part":"INDERPURI","n":262},{"ps":96,"blo":"REKHA RANI","part":"INDERPURI","n":182},{"ps":97,"blo":"NISANKOCH SINGH","part":"INDERPURI","n":212},{"ps":98,"blo":"MADHU RANI","part":"INDERPURI","n":385},{"ps":99,"blo":"SHIV SHAKTI SAIN","part":"INDERPURI","n":339},{"ps":100,"blo":"MONICA BHANDARI","part":"NARAINA VIHAR","n":118},{"ps":101,"blo":"SANTOSH KUMARI","part":"NARAINA VIHAR","n":114},{"ps":102,"blo":"ASHOK KUMAR","part":"NARAINA VIHAR","n":394},{"ps":103,"blo":"RUCHI TANWAR MANAV","part":"NARAINA VIHAR","n":227},{"ps":104,"blo":"AKTA SAHARAN","part":"NARAINA VIHAR","n":134},{"ps":105,"blo":"Nidhi chouhan","part":"NARAINA VIHAR","n":397},{"ps":106,"blo":"RITU KUMARI","part":"NARAINA VIHAR","n":358},{"ps":107,"blo":"SEEMA SINGH","part":"NARAINA VIHAR","n":182},{"ps":108,"blo":"KULDEEP SINGH","part":"NARAINA VIHAR","n":507},{"ps":109,"blo":"Gouri Relhan","part":"NARAINA VIHAR","n":109},{"ps":110,"blo":"SANTOSH KUMARI","part":"NARAINA VIHAR","n":184},{"ps":111,"blo":"ROSHAN RANJAN","part":"NARAINA VIHAR","n":682},{"ps":112,"blo":"MEENU MALHOTRA","part":"NARAINA VIHAR","n":357},{"ps":113,"blo":"SHWETA SINGH","part":"NARAINA VIHAR","n":370},{"ps":114,"blo":"SHIKHA SHARMA","part":"NARAINA VIHAR","n":442},{"ps":115,"blo":"PREM KUMARI","part":"NARAINA VIHAR","n":244},{"ps":116,"blo":"REKHA KHATRI","part":"NARAINA VIHAR","n":337},{"ps":117,"blo":"RAJ BALA","part":"NARAINA VIHAR","n":83},{"ps":118,"blo":"SURINDER NIRWAN","part":"NARAINA VIHAR","n":313},{"ps":119,"blo":"LISA","part":"NARAINA VIHAR","n":390},{"ps":120,"blo":"VEENA TANWAR","part":"NARAINA VIHAR","n":121},{"ps":121,"blo":"BHARTI SHARMA","part":"NARAINA VIHAR","n":208},{"ps":122,"blo":"GAGAN DEEP","part":"NARAINA VIHAR","n":609},{"ps":123,"blo":"HARPREET KAUR","part":"NARAINA VIHAR","n":580},{"ps":124,"blo":"RAJNI KUMARI","part":"NARAINA VIHAR","n":559},{"ps":125,"blo":"AKHIL TANWAR","part":"NARAINA VIHAR","n":217},{"ps":126,"blo":"PARAG TANWAR","part":"NARAINA VIHAR","n":355},{"ps":127,"blo":"MEENAKSHI RANI","part":"NARAINA VIHAR","n":649},{"ps":128,"blo":"ANSHUL TANWAR","part":"NARAINA VIHAR","n":649},{"ps":129,"blo":"GULAB SINGH","part":"NARAINA VIHAR","n":408},{"ps":130,"blo":"SONIA","part":"NARAINA VIHAR","n":616},{"ps":131,"blo":"MEENAKSHI DEVI","part":"NARAINA VIHAR","n":322},{"ps":132,"blo":"GAYATRI","part":"NARAINA VIHAR","n":361},{"ps":133,"blo":"SHYAM SUNDER","part":"NARAINA VIHAR","n":276},{"ps":134,"blo":"MADHU BALA","part":"NARAINA VIHAR","n":336},{"ps":135,"blo":"SEEMA","part":"NARAINA VIHAR","n":497},{"ps":136,"blo":"SHABNAM KUMARI","part":"NARAINA VIHAR","n":368},{"ps":137,"blo":"ONKAR","part":"NARAINA VIHAR","n":620},{"ps":138,"blo":"KAVITA YADAV","part":"DASGHARA/TODAPUR","n":412},{"ps":139,"blo":"SANJAY DANGWAL","part":"DASGHARA/TODAPUR","n":604},{"ps":140,"blo":"ANCHAL YADAV","part":"DASGHARA/TODAPUR","n":508},{"ps":141,"blo":"RAJU KUMAR","part":"DASGHARA/TODAPUR","n":490},{"ps":142,"blo":"POONAM","part":"DASGHARA/TODAPUR","n":487},{"ps":143,"blo":"SANGEETA","part":"DASGHARA/TODAPUR","n":474},{"ps":144,"blo":"UMESH KUMAR","part":"DASGHARA/TODAPUR","n":408},{"ps":145,"blo":"JYANTI BALA","part":"DASGHARA/TODAPUR","n":716},{"ps":146,"blo":"HEMLATA","part":"DASGHARA/TODAPUR","n":462},{"ps":147,"blo":"SURESHACHANDRA","part":"DASGHARA/TODAPUR","n":544},{"ps":148,"blo":"SUSHILA DEVI","part":"DASGHARA/TODAPUR","n":785},{"ps":149,"blo":"PRAVEEN","part":"DASGHARA/TODAPUR","n":486},{"ps":150,"blo":"DURGA","part":"DASGHARA/TODAPUR","n":590},{"ps":151,"blo":"NISHA CHOUDHARY","part":"DASGHARA/TODAPUR","n":558}];
+  async function getJSONRetry(u, tries = 3){
+    for(let i = 0; ; i++){
+      const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 8000);
+      try{ const r = await fetch(u + (u.includes('?') ? '&' : '?') + 't=' + Date.now(), {cache:'no-store', signal: ctl.signal});
+           if(!r.ok) throw new Error('HTTP '+r.status); return await r.json(); }
+      catch(e){ if(i >= tries - 1) throw e; await sleep(1500 * (i + 1)); }
+      finally{ clearTimeout(t); }
+    }
+  }
+  async function init(){
+    const first = $('bloSel').options[0], firstTxt = first.textContent;
+    first.textContent = 'Loading…';
+    try{ blos = await getJSONRetry('data/blos.json'); if(!Array.isArray(blos) || !blos.length) throw new Error('empty list'); }
+    catch(e){ console.warn('blos.json failed, using built-in list:', e); blos = BLOS_FALLBACK; }
+    first.textContent = firstTxt;
+    $('bloSel').insertAdjacentHTML('beforeend', blos.map(b =>
+      `<option value="${b.ps}">${b.ps} – ${esc(b.blo)} (${esc(b.part)})</option>`).join(''));
+    const fromUrl = new URLSearchParams(location.search).get('ps');
+    const last = fromUrl || store.get('asdd_last_ps');
+    if(last && blos.some(b => String(b.ps)===String(last))){ $('bloSel').value = String(last); loadPS(); }
+  }
+
+  async function loadPS(){
+    if(dirty.size && !confirm('You have unsaved changes. Switch Part No. anyway? (They stay saved on this device as a draft.)')){
+      $('bloSel').value = cur ? String(cur.ps) : ''; return;
+    }
+    const ps = $('bloSel').value;
+    if(!ps){ $('work').classList.add('hide'); $('savebar').style.display='none'; $('partMeta').textContent=''; cur=null; return; }
+    cur = blos.find(b => String(b.ps)===ps);
+    store.set('asdd_last_ps', ps);
+    $('partMeta').textContent = `Part No. ${cur.ps} – ${cur.part} · BLO: ${cur.blo} · ${cur.n} electors in ASDD list`;
+    $('work').classList.remove('hide'); $('savebar').style.display='block';
+    $('tb').innerHTML=''; $('loader').classList.remove('hide'); $('none').classList.add('hide');
+    setMsg('Loading…');
+    try{
+      const [data, sv] = await Promise.all([
+        getJSONRetry(`data/g${Math.floor((Number(ps)-1)/19)+1}.json`).then(g => g[ps]),
+        hasBackend ? backendGet(`${URL_}?action=get&ps=${ps}`, n => setMsg(`Server busy, retrying (${n})…`,'warn')).catch(e => ({ok:false,error:e.message})) : Promise.resolve({ok:true,data:{}})
+      ]);
+      if(cur.ps !== Number(ps)) return;
+      rows = data;
+      saved = {};
+      const raw = (sv && sv.ok && sv.data) ? sv.data : {};
+      for(const ep in raw) saved[ep] = pad(raw[ep]);
+      psFrozen = null;   // Freeze feature removed – every PS stays editable
+      ans = {}; dirty = new Set(); errEp = new Set(); selected = new Set();
+      for(const r of rows){ ans[r[1]] = saved[r[1]] ? pad(saved[r[1]]) : blank(); }
+      // restore unsaved draft from this device
+      const draft = store.get('asdd_draft_'+ps) || {};
+      for(const ep in draft){ if(ans[ep]){ const old = ans[ep][NF]; ans[ep] = pad(draft[ep]); ans[ep][NF] = old; if(isChanged(ep)) dirty.add(ep); } }
+      const unconf = store.get('asdd_unconfirmed_'+ps);
+      if(unconf && sv && sv.ok){
+        const tr = {}; for(const ep in unconf) tr[ep] = isSubmitted(ep) ? saved[ep] : undefined;
+        const r = applyTruth(unconf, tr); store.del('asdd_unconfirmed_'+ps); saveDraft();
+        render(); updateStats();
+        setMsg('Result of your last unconfirmed submit: ' + resultMsg(r, 0), (r.failed || r.taken) ? 'err' : 'ok');
+        return;
+      }
+      render(); updateStats();
+      if(sv && sv.ok===false) setMsg('Could not read saved data from the server — check internet and tap "Reload from sheet".','err');
+      else if(dirty.size) setMsg(`${dirty.size} unsaved change(s) restored from this device. Tap Submit to save.`,'warn');
+      else{ const needD = rows.filter(r => isSubmitted(r[1]) && !savedComplete(r[1])).length;
+        setMsg(needD ? `${needD} elector(s) need details (visit dates${''}, and reason / Form-6 for Residing) – tap Edit on them, fill and Save.` : Object.keys(saved).length ? 'Saved answers loaded.' : 'Tap Edit on an elector to fill the details.', needD ? 'warn' : ''); }
+    }catch(e){ setMsg('Failed to load list: '+e.message,'err'); }
+    finally{ $('loader').classList.add('hide'); }
+  }
+
+  // Freeze was removed (30 Oct) – every PS stays editable. Kept as null so older code paths stay harmless.
+  let psFrozen = null;
+  const isSubmitted = ep => !!(saved[ep] && saved[ep][0]);
+  const isLocked = () => !!psFrozen;
+  function flagLocked(){ setMsg('🔒 Entries are frozen – they cannot be changed.','err'); }
+  function showFrozen(){ $('frozenBar').classList.add('hide'); }
+  function isChanged(ep){ return !sameAns(saved[ep] || blank(), ans[ep]); }
+  const savedComplete = ep => isComplete(saved[ep]);
+  function rowTxt(ep){
+    if(errEp.has(ep)) return 'Not updated – tap Reload';
+    if(dirty.has(ep)) return isComplete(ans[ep]) ? '✎ Not submitted yet' : (ans[ep][0] ? '⚠ Details incomplete' : '✎ Not submitted yet');
+    if(isSubmitted(ep)) return savedComplete(ep) ? '✓ Submitted' : '⚠ Details needed – tap Edit';
+    return '';
+  }
+
+  // Cell helpers: "—" for a field that does not apply; red "Required" for a missing mandatory one
+  const cellNA = '<td class="c-long c-na">—</td>';
+  function cell(v, applies, missing, cls){
+    if(!applies) return `<td class="${cls||'c-long'} c-na">—</td>`;
+    if(missing) return `<td class="${cls||'c-long'} c-bad">Required</td>`;
+    return `<td class="${cls||'c-long'}">${v ? esc(v) : '<span class="ans-none">—</span>'}</td>`;
+  }
+  const lblM = t => `<span class="lbl-m">${t}</span>`;
+  function rowHtml(r){
+    const [sn, epic, name, rt, rn, op, os, , , st] = r;
+    const a = norm(ans[epic]), done = isComplete(ans[epic]), pr = a[0] ? problems(ans[epic]) : {};
+    const res = a[0]==='Residing', no = res && a[1]==='No';
+    const stTxt = a[0] ? `<span class="${res?'st-r':'st-a'}">${a[0]}</span>` : '<span class="ans-none">—</span>';
+    const tx = rowTxt(epic);
+    const cls = [done?'done':'', dirty.has(epic)?'dirty':'', errEp.has(epic)?'lockerr':'', a[0] && !done ? 'incomplete' : ''].join(' ');
+    return `<tr data-ep="${epic}" class="${cls}">
+      <td class="c-sn">${esc(sn)}</td><td class="c-dist">CENTRAL</td><td class="c-acno">39</td><td class="c-acname">RAJINDER NAGAR</td>
+      <td class="c-name">${esc(name)}</td><td>${lblM('EPIC No.')}${epic}</td>
+      <td>${lblM('Relation')}${esc(rt)}</td><td>${lblM('Relation Name')}${esc(rn)}</td>
+      <td>${lblM('Part No')}${esc(op)}</td><td>${lblM('Serial No')}${esc(os)}</td>
+      ${cell(a[2], true, pr.edD1, 'c-date').replace('>', '>' + lblM('Visit dates – Enumeration'))}
+      <td class="c-wide">${lblM('Status in ASDD list')}<span class="tag ${tagCls(st)}">${esc(st)}</span></td>
+      ${cell(a[3], true, pr.edD2, 'c-date').replace('>', '>' + lblM('Visit dates – Re-verification'))}
+      <td class="c-wide">${lblM('Status during re-verification')}${stTxt}</td>
+      ${cell(a[4], res, pr.edR1).replace('>', '>' + lblM('Reason EF not submitted'))}
+      ${cell(a[1], res, pr.edF, 'c-f6').replace('>', '>' + lblM('Form-6 obtained'))}
+      ${cell(a[5], no, pr.edR2).replace('>', '>' + lblM('Reason Form-6 not obtained'))}
+      ${cell(a[6], no, pr.edN).replace('>', '>' + lblM('Refused by (name)'))}
+      ${cell(a[7], no, pr.edM, 'c-mob').replace('>', '>' + lblM('Refused by (mobile)'))}
+      <td class="c-edit"><button class="editlink" type="button">Edit</button>${tx ? `<div class="rowmsg">${tx}</div>` : ''}</td>
+    </tr>`;
+  }
+  function filtered(){
+    const q = $('q').value.trim().toUpperCase(), fw = $('fShow').value;
+    return rows.filter(r => {
+      const epic = r[1], a = norm(ans[epic]), done = isComplete(ans[epic]);
+      if(fw==='pending' && done) return false;
+      if(fw==='done' && !done) return false;
+      if((fw==='Residing' || fw==='ASDD') && a[0]!==fw) return false;
+      return !q || r[2].toUpperCase().includes(q) || epic.includes(q) || String(r[0])===q || String(r[6])===q;
+    });
+  }
+  function render(){
+    const list = filtered();
+    shownEps = list.map(r => r[1]);
+    $('tb').innerHTML = list.map(rowHtml).join('');
+    $('none').classList.toggle('hide', list.length>0);
+    $('shown').textContent = `Showing ${list.length} of ${rows.length}`;
+  }
+  function redrawRow(ep){
+    const tr = $('tb').querySelector(`tr[data-ep="${ep}"]`); if(!tr) return;
+    const r = rows.find(x => x[1]===ep); if(!r) return;
+    const t = document.createElement('tbody'); t.innerHTML = rowHtml(r); tr.replaceWith(t.firstElementChild);
+  }
+  function updateStats(){
+    let done=0,res=0,asdd=0,f6=0;
+    for(const r of rows){ const a=norm(ans[r[1]]); if(isComplete(ans[r[1]])) done++; if(a[0]==='Residing') res++; if(a[0]==='ASDD') asdd++; if(a[0]==='Residing' && a[1]==='Yes') f6++; }
+    $('sTotal').textContent = rows.length; $('sDone').textContent = done; $('sPend').textContent = rows.length-done;
+    $('sRes').textContent = res; $('sAsdd').textContent = asdd; $('sF6').textContent = f6;
+    $('sBar').style.width = (rows.length ? done/rows.length*100 : 0)+'%';
+    $('save').disabled = busy || !dirty.size || !hasBackend;
+    $('bulkD1').disabled = $('bulkD2').disabled = busy || !rows.length;
+    $('freeze').disabled = true;
+    if(!busy && dirty.size) setMsg(`${dirty.size} unsaved change(s). Tap Submit to save.`,'warn');
+  }
+
+  function saveDraft(){
+    if(!cur) return;
+    const d = {}; dirty.forEach(ep => d[ep] = norm(ans[ep]));
+    if(dirty.size) store.set('asdd_draft_'+cur.ps, d); else store.del('asdd_draft_'+cur.ps);
+  }
+  function touch(ep){ if(isChanged(ep)) dirty.add(ep); else dirty.delete(ep); }
+
+  // Table clicks: Edit button and row checkboxes
+  $('tb').addEventListener('click', e => {
+    const tr = e.target.closest('tr'); if(!tr) return;
+    const ep = tr.dataset.ep;
+    if(e.target.closest('.editlink')){ openEdit(ep); return; }
+  });
+  /* ---------- Bulk visit dates (all electors of this PS) ---------- */
+  let bkK = 0, bkDates = [];
+  function drawBk(){
+    const box = $('bkD');
+    box.innerHTML = (bkDates.length ? '' : '<span class="meta" style="margin:0">No date added</span>')
+      + bkDates.map((d,i) => `<span class="chip">${esc(d)}<button type="button" data-i="${i}" title="Remove">×</button></span>`).join('')
+      + (!bkDates.length ? `<input type="date" min="2025-01-01" max="${todayISO()}" aria-label="Pick a visit date"><button type="button" class="addd">📅 Pick date</button>` : '');
+  }
+  function addBk(){
+    const inp = $('bkD').querySelector('input[type=date]'); if(!inp || !inp.value) return;
+    if(inp.value > todayISO()){ alert('A visit date cannot be in the future.'); inp.value=''; inp.classList.remove('picked'); return; }
+    if(inp.value < '2025-01-01'){ alert('Please pick a date from 2025 onwards.'); inp.value=''; inp.classList.remove('picked'); return; }
+    const d = isoToDMY(inp.value);
+    bkDates = [d];                                   // only one date allowed
+    $('bkErr').textContent = ''; $('bkD').closest('.fld').classList.remove('bad'); drawBk();
+  }
+  // Date is added when the picker is closed (iPhone "Done" / Android "OK" / clicking away) or with "+ Add date".
+  // Not on 'change': on iPhone 'change' fires while the wheel is still turning, which closed the picker early.
+  let bkLast = 0;
+  $('bkD').addEventListener('focusout', e => { if(e.target.matches('input[type=date]') && e.target.value){ bkLast = Date.now(); setTimeout(addBk, 0); } });
+  $('bkD').addEventListener('change', e => { if(e.target.matches('input[type=date]')) e.target.classList.toggle('picked', !!e.target.value); });
+  $('bkD').addEventListener('click', e => {
+    const b = e.target.closest('button'); if(!b) return;
+    if(b.classList.contains('addd')){ if(Date.now() - bkLast < 600) return; const inp = $('bkD').querySelector('input[type=date]'); if(inp.value) addBk(); else openPicker(inp); return; }
+    bkDates.splice(+b.dataset.i, 1); drawBk();
+  });
+  function openBulk(k){
+    if(!cur || !rows.length || busy) return;
+    bkK = k; bkDates = [];
+    const name = (k ? 'Date of visit by BLO during Re-verification' : 'Date of visit by BLO during Enumeration Phase') + ' (one date only)';
+    const empty = rows.filter(r => !norm(ans[r[1]])[k ? 3 : 2]).length;
+    $('bkTitle').textContent = k ? 'Date of Re-visit – all electors' : 'Date of Enumeration – all electors';
+    $('bkLbl').textContent = name;
+    $('bkInfo').innerHTML = `PS-${cur.ps} · ${esc(cur.blo)} · <b>${rows.length}</b> electors, <b>${empty}</b> without this date yet.`;
+    document.querySelector('input[name=bkMode][value=empty]').checked = true;
+    $('bkErr').textContent = ''; $('bkD').closest('.fld').classList.remove('bad');
+    drawBk(); $('bkModal').classList.remove('hide');
+  }
+  const closeBulk = () => $('bkModal').classList.add('hide');
+  $('bulkD1').addEventListener('click', () => openBulk(0));
+  $('bulkD2').addEventListener('click', () => openBulk(1));
+  $('bkCancel').addEventListener('click', closeBulk);
+  $('bkModal').addEventListener('click', e => { if(e.target === $('bkModal')) closeBulk(); });
+  $('bkForm').addEventListener('submit', e => {
+    e.preventDefault();
+    addBk();
+    if(bkDates.length !== 1){ $('bkErr').textContent = 'Add one date'; $('bkD').closest('.fld').classList.add('bad'); return; }
+    const idx = bkK ? 3 : 2, val = bkDates.join(', '), all = document.querySelector('input[name=bkMode]:checked').value === 'all';
+    const targets = rows.filter(r => all || !norm(ans[r[1]])[idx]);
+    if(!targets.length){ $('bkErr').textContent = 'All electors already have this date. Choose "All electors" to replace it.'; return; }
+    const noStatus = targets.filter(r => !norm(ans[r[1]])[0]).length;
+    for(const r of targets){ const ep = r[1]; ans[ep][idx] = val; errEp.delete(ep); touch(ep); }
+    closeBulk(); saveDraft(); render(); updateStats();
+    setMsg(`${bkK ? 'Re-visit' : 'Enumeration'} date ${val} filled for ${targets.length} elector(s) – NOT saved yet. Check, then tap Submit below.` + (noStatus ? ` ${noStatus} of them have no Residing/ASDD yet – use Edit.` : ''), 'warn');
+  });
+
+  /* ---------- Edit form (one elector) ---------- */
+  let edEp = null, edDates = [[], []];
+  let edLast = 0;
+  function openPicker(inp){ try{ if(inp.showPicker){ inp.showPicker(); return; } }catch(_){} inp.focus(); inp.click(); }
+  const todayISO = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
+  const isoToDMY = s => { const [y,m,d] = s.split('-'); return `${d}-${m}-${y}`; };
+  const dmyKey = s => { const m = /^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{4})$/.exec(s.trim()); return m ? m[3] + m[2].padStart(2,'0') + m[1].padStart(2,'0') : s; };
+  function drawDates(k){
+    const box = $(k ? 'edD2' : 'edD1');
+    box.innerHTML = edDates[k].map((d,i) => `<span class="chip">${esc(d)}<button type="button" data-k="${k}" data-i="${i}" title="Remove">×</button></span>`).join('')
+      + (!edDates[k].length ? `<input type="date" data-k="${k}" min="2025-01-01" max="${todayISO()}" aria-label="Pick a visit date"><button type="button" class="addd" data-k="${k}">📅 Pick date</button>` : '');
+    if(!edDates[k].length) box.insertAdjacentHTML('afterbegin', '<span class="meta" style="margin:0">No date added</span>');
+    if(edDates[k].length > 1) box.insertAdjacentHTML('beforeend', '<span class="meta" style="margin:0;color:#c4472f">Only one date allowed – tap × to remove the extra date(s)</span>');
+  }
+  function addDate(k){
+    const inp = $(k ? 'edD2' : 'edD1').querySelector('input[type=date]'); if(!inp || !inp.value) return;
+    if(inp.value > todayISO()){ alert('A visit date cannot be in the future.'); inp.value=''; inp.classList.remove('picked'); return; }
+    if(inp.value < '2025-01-01'){ alert('Please pick a date from 2025 onwards.'); inp.value=''; inp.classList.remove('picked'); return; }
+    const d = isoToDMY(inp.value);
+    edDates[k] = [d];                                // only one date allowed
+    drawDates(k);
+  }
+  ['edD1','edD2'].forEach(id => {
+    $(id).addEventListener('focusout', e => { if(e.target.matches('input[type=date]') && e.target.value){ const k = +e.target.dataset.k; edLast = Date.now(); setTimeout(() => addDate(k), 0); } });
+    $(id).addEventListener('change', e => { if(e.target.matches('input[type=date]')) e.target.classList.toggle('picked', !!e.target.value); });
+    $(id).addEventListener('click', e => {
+      const b = e.target.closest('button'); if(!b) return;
+      const k = +b.dataset.k;
+      if(b.classList.contains('addd')){ if(Date.now() - edLast < 600) return; const inp = $(id).querySelector('input[type=date]'); if(inp.value) addDate(k); else openPicker(inp); return; }
+      edDates[k].splice(+b.dataset.i, 1); drawDates(k);
+    });
+  });
+  // Enable / disable fields according to the rules:
+  //  ASDD -> everything except the two date fields disabled
+  //  Residing -> "Reason for not submitting EF" and Form-6 enabled & mandatory
+  //  Form-6 Yes -> next 3 fields disabled; Form-6 No -> next 3 fields mandatory
+  function setOn(id, on){
+    const el = $(id); el.closest('.fld').classList.toggle('off', !on);
+    if(!on && !el.disabled){ el.dataset.keep = el.value; el.value = ''; }
+    if(on && el.disabled && !el.value && el.dataset.keep){ el.value = el.dataset.keep; }
+    el.disabled = !on;
+    if(!on){ el.closest('.fld').classList.remove('bad'); const fe = document.querySelector(`.ferr[data-for="${id}"]`); if(fe) fe.textContent=''; }
+  }
+  function applyDeps(){
+    const res = $('edS').value === 'Residing', no = res && $('edF').value === 'No';
+    setOn('edR1', res); setOn('edF', res); setOn('edR2', no); setOn('edN', no); setOn('edM', no);
+  }
+  const edValue = () => [$('edS').value, $('edF').value, edDates[0].join(', '), edDates[1].join(', '),
+    $('edR1').value, $('edR2').value, $('edN').value, $('edM').value];
+  function showErrors(e){
+    document.querySelectorAll('#edForm .ferr').forEach(f => { const m = e[f.dataset.for] || ''; f.textContent = m; f.closest('.fld').classList.toggle('bad', !!m); });
+  }
+  function openEdit(ep){
+    const r = rows.find(x => x[1]===ep); if(!r) return;
+    edEp = ep;
+    const a = pad(ans[ep]);
+    $('edTitle').textContent = 'Edit – ' + r[2];
+    $('edInfo').innerHTML = `EPIC <b>${esc(ep)}</b> · ${esc(r[3])}: ${esc(r[4])} · Part ${esc(r[5])}, Serial ${esc(r[6])} · ASDD list: <b>${esc(r[9])}</b>`;
+    ['edR1','edF','edR2','edN','edM','edS'].forEach(id => { $(id).disabled = false; $(id).dataset.keep = ''; $(id).closest('.fld').classList.remove('off'); });
+    $('edS').value = a[0]; $('edF').value = a[1]; $('edR1').value = a[4]; $('edR2').value = a[5]; $('edN').value = a[6]; $('edM').value = a[7];
+    edDates = [splitDates(a[2]), splitDates(a[3])]; drawDates(0); drawDates(1);
+    const old = String(a[NF]||'').trim() === String(a[5]||'').trim() ? '' : String(a[NF]||'').trim();
+    $('edOld').classList.toggle('hide', !old);
+    $('edOld').textContent = old ? 'Remarks entered earlier: ' + old : '';
+    showErrors({}); applyDeps();
+    $('edModal').classList.remove('hide');
+  }
+  function closeEdit(){ $('edModal').classList.add('hide'); edEp = null; }
+  $('edS').addEventListener('change', () => { applyDeps(); showErrors({}); });
+  $('edF').addEventListener('change', () => { applyDeps(); showErrors({}); });
+  $('edM').addEventListener('input', e => { const v = e.target.value.replace(/\D/g,'').slice(0,10); if(v !== e.target.value) e.target.value = v; });
+  $('edCancel').addEventListener('click', closeEdit);
+  $('edModal').addEventListener('click', e => { if(e.target === $('edModal')) closeEdit(); });
+  document.addEventListener('keydown', e => { if(e.key!=='Escape') return; if(!$('edModal').classList.contains('hide')) closeEdit(); if(!$('bkModal').classList.contains('hide')) closeBulk(); });
+  $('edForm').addEventListener('submit', e => {
+    e.preventDefault(); if(!edEp) return;
+    // a date picked but not yet added counts too
+    [0,1].forEach(k => { const inp = $(k ? 'edD2' : 'edD1').querySelector('input[type=date]'); if(inp && inp.value) addDate(k); });
+    const v = edValue(), err = problems(v);
+    if(Object.keys(err).length){ showErrors(err); const f = document.querySelector('#edForm .fld.bad'); if(f){ f.scrollIntoView({block:'center'}); const i = f.querySelector('select,input,textarea'); if(i) i.focus({preventScroll:true}); } return; }
+    const ep = edEp, keep = ans[ep][NF];
+    ans[ep] = pad(norm(v)); ans[ep][NF] = keep; errEp.delete(ep); touch(ep);
+    closeEdit(); saveDraft(); redrawRow(ep); updateStats();
+    if(dirty.has(ep)) submit(true);
+    else setMsg('No change for this elector.','');
+  });
+
+  async function submit(fromEdit){
+    if(!dirty.size || busy) return;
+    const pend = rows.filter(r => dirty.has(r[1]));
+    const list = pend.filter(r => norm(ans[r[1]])[0]);           // needs at least Residing/ASDD
+    const half = pend.length - list.length;
+    const part = list.filter(r => !isComplete(ans[r[1]])).length;  // saved, but details still missing
+    if(!list.length){ setMsg('Incomplete: tap Edit on the highlighted electors and fill the required details.','err'); return; }
+    const nUpd = list.filter(r => isSubmitted(r[1])).length, nNew = list.length - nUpd;
+    const quiet = fromEdit === true && list.length === 1 && !half;
+    if(!quiet && !confirm(`Submit ${list.length} elector(s)?` + (nNew ? `\n• ${nNew} new` : '') + (nUpd ? `\n• ${nUpd} already submitted – their answers will be updated` : '')
+      + (part ? `\n\n${part} of them still have required details missing – they will be saved but stay "Details needed" until you fill them with Edit.` : '')
+      + (half ? `\n\n${half} elector(s) without Residing/ASDD will NOT be submitted.` : ''))) return;
+    busy = true; $('save').disabled = true; $('save').textContent = 'Saving…';
+    setMsg(`Saving ${list.length} elector(s)…`);
+    const payload = { ps: cur.ps, blo: cur.blo, partName: cur.part, v: 2,
+      rows: list.map(r => [r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7], r[8], r[9], ...norm(ans[r[1]])]) };
+    const sent = {}; list.forEach(r => sent[r[1]] = norm(ans[r[1]]));
+    let out = null;
+    try{
+      out = await backend(JSON.stringify(payload), n => setMsg(`Server busy, retrying (${n})… please keep this page open.`,'warn'));
+    }catch(e){ out = null; }
+
+    // Decide, per elector, what is REALLY in the Google Sheet.
+    let truth = null;
+    if(out && out.ok){
+      truth = {};
+      const skip = new Set(out.skipped || []);
+      list.forEach(r => { const ep = r[1]; truth[ep] = skip.has(ep) ? undefined : sent[ep]; });
+    }else{
+      // Save failed or the reply was lost – ask the sheet directly before telling the BLO anything.
+      setMsg('Checking with the server whether your data was saved…','warn');
+      const sv = await backendGet(`${URL_}?action=get&ps=${cur.ps}`).catch(() => null);
+      if(sv && sv.ok){ truth = {}; list.forEach(r => { const x = sv.data && sv.data[r[1]]; truth[r[1]] = x && x[0] ? pad(x) : undefined; }); }
+    }
+
+    if(!truth){
+      // Could not reach Google at all – we genuinely don't know yet. Keep everything, check again on next open.
+      store.set('asdd_unconfirmed_'+cur.ps, sent);
+      busy = false; updateStats(); $('save').textContent = 'Submit';
+      setMsg(`⚠ No internet / Google not reachable. Could NOT confirm whether ${list.length} elector(s) were saved. `
+        + `Your entries are kept on this phone. When internet is back, refresh this page (pull down) – it will show exactly what was saved.`,'err');
+      return;
+    }
+    const res = applyTruth(sent, truth);
+    store.del('asdd_unconfirmed_'+cur.ps);
+    saveDraft(); busy = false; render(); updateStats(); $('save').textContent = 'Submit';
+    setMsg(resultMsg(res, half), (res.failed || res.taken) ? 'err' : 'ok');
+  }
+
+  // Applies the sheet's real state to the page. Returns counts.
+  function applyTruth(sent, truth){
+    const r = { saved:0, taken:0, failed:0 };
+    for(const ep in sent){
+      const t = truth[ep], keep = ans[ep] ? ans[ep][NF] : '';
+      if(t && sameAns(t, sent[ep])){ saved[ep] = pad(norm(t)); saved[ep][NF] = keep; ans[ep] = pad(saved[ep]); dirty.delete(ep); errEp.delete(ep); r.saved++; }
+      else if(t && t[0]){ saved[ep] = pad(t); saved[ep][NF] = keep; ans[ep] = pad(saved[ep]); dirty.delete(ep); errEp.add(ep); r.taken++; }   // sheet has a different answer
+      else { r.failed++; }                                                                                                                   // not in sheet – still pending
+    }
+    return r;
+  }
+  function resultMsg(r, half){
+    const parts = [];
+    if(r.saved)  parts.push(`✓ ${r.saved} elector(s) SAVED`);
+    if(r.failed) parts.push(`✗ ${r.failed} elector(s) NOT saved – please tap Submit again`);
+    if(r.taken)  parts.push(`✗ ${r.taken} elector(s) NOT updated – sheet has a different answer, tap "Reload from sheet"`);
+    if(half)     parts.push(`${half} elector(s) without Residing/ASDD not submitted`);
+    const need = rows.filter(r => !isComplete(ans[r[1]])).length;
+    if(need)     parts.push(`${need} elector(s) still need details (tap Edit)`);
+    return parts.join(' · ') + ` (${new Date().toLocaleTimeString()})`;
+  }
+
+  // Freeze: BLO locks all entries of this PS for good. Separate from Submit.
+  async function freezePS(){
+    if(!cur || busy || psFrozen) return;
+    if(dirty.size){ setMsg('You have unsaved changes – tap Submit first, then Freeze.','err'); return; }
+    const notDone = rows.filter(r => !savedComplete(r[1])).length;
+    if(notDone){ setMsg(`Freeze is available only after ALL electors are submitted (with Remarks for Residing) – ${notDone} still pending.`,'err'); return; }
+    if(!confirm(`FREEZE all entries of PS-${cur.ps} (${cur.blo})?\n\nAll ${rows.length} electors are submitted.\nAfter freezing you can NOT change any entry again.`)) return;
+    busy = true; updateStats(); $('freeze').textContent = 'Freezing…'; setMsg('Freezing your entries…');
+    let out = null;
+    try{ out = await backend(JSON.stringify({ action:'freeze', ps: cur.ps, blo: cur.blo }), n => setMsg(`Server busy, retrying (${n})…`,'warn')); }
+    catch(e){ out = null; }
+    if(!out || !out.ok){                       // not sure – ask the sheet
+      const sv = await backendGet(`${URL_}?action=get&ps=${cur.ps}`).catch(() => null);
+      if(sv && sv.ok && sv.frozen) out = { ok:true, frozen: sv.frozen };
+    }
+    busy = false;
+    if(out && out.ok && out.frozen){
+      psFrozen = out.frozen; store.del('asdd_draft_'+cur.ps);
+      render(); updateStats();
+      setMsg(`🔒 Entries FROZEN${psFrozen.at ? ' on ' + psFrozen.at : ''}. No further changes are possible.`,'ok');
+    }else{
+      updateStats(); showFrozen();
+      setMsg('✗ Could not freeze – ' + ((out && out.error) || 'no internet / Google not reachable') + '. Please try again.','err');
+    }
+  }
+  // Freeze button removed (30 Oct) – freezePS is no longer wired up.
+
+  $('bloSel').addEventListener('change', loadPS);
+  $('save').addEventListener('click', submit);
+  $('reload').addEventListener('click', () => {
+    if(dirty.size && !confirm('Discard unsaved changes and reload saved data from the sheet?')) return;
+    if(cur){ store.del('asdd_draft_'+cur.ps); dirty.clear(); loadPS(); }
+  });
+  let t; $('q').addEventListener('input', () => { if(!cur) return; clearTimeout(t); t = setTimeout(render, 150); });
+  $('fShow').addEventListener('change', () => { if(cur) render(); });
+  // Search By EPIC: filters the open Part; if the EPIC is not in it (or no Part is open), finds its Part and opens it
+  async function searchEpic(){
+    const q = $('q').value.trim().toUpperCase(); $('q').value = q;
+    if(!q){ if(cur) render(); return; }
+    if(cur && rows.some(r => r[1] === q)){ $('fShow').value = ''; render(); return; }
+    if(!/^[A-Z]{2,4}\d{5,8}$/.test(q)){ if(cur) render(); else alert('Select a Part No. first, or enter a full EPIC number.'); return; }
+    const btn = $('qBtn'), old = btn.textContent; btn.disabled = true; btn.textContent = 'Searching…';
+    try{
+      for(let g = 1; g <= 8; g++){
+        const grp = await getJSONRetry(`data/g${g}.json`);
+        for(const ps in grp){ if(grp[ps].some(r => r[1] === q)){
+          if(cur && String(cur.ps) === ps){ $('fShow').value = ''; render(); return; }
+          if(dirty.size && !confirm(`EPIC ${q} is in Part No. ${ps}. You have unsaved changes here – open Part ${ps} anyway? (Your changes stay saved on this device as a draft.)`)) return;
+          dirty.clear(); $('bloSel').value = ps; $('fShow').value = ''; await loadPS(); return;
+        } }
+      }
+      alert(`EPIC ${q} was not found in the ASDD list of AC 39.`);
+    }catch(e){ alert('Search failed – check internet and try again.'); }
+    finally{ btn.disabled = false; btn.textContent = old; }
+  }
+  $('qBtn').addEventListener('click', searchEpic);
+  $('q').addEventListener('keydown', e => { if(e.key === 'Enter'){ e.preventDefault(); searchEpic(); } });
+  let skipUnloadPrompt = false;
+  window.addEventListener('beforeunload', e => { if(dirty.size && !skipUnloadPrompt){ e.preventDefault(); e.returnValue=''; } });
+
+  // ---- Auto-update: if a newer version of the website is published, reload (or ask to) ----
+  const APP_VER = '2026-11-06-ac39-1';
+  function reloadFresh(){
+    skipUnloadPrompt = true;   // unsaved entries are kept as a draft on the phone, so reloading is safe
+    const u = new URL(location.href); u.searchParams.set('v', Date.now()); location.replace(u.toString());
+  }
+  function showUpdateBanner(){
+    if(document.getElementById('updBanner')) return;
+    const b = document.createElement('div'); b.id = 'updBanner';
+    b.style.cssText = 'position:fixed;left:0;right:0;top:0;z-index:9999;background:#c4472f;color:#fff;font-weight:700;padding:12px 14px;text-align:center;font-size:15px;box-shadow:0 2px 8px rgba(0,0,0,.25);cursor:pointer';
+    b.textContent = 'New version of the website is available – tap here to refresh (your unsaved entries will be kept)';
+    b.onclick = reloadFresh; document.body.appendChild(b);
+  }
+  let verChecking = false;
+  async function checkVersion(){
+    if(verChecking) return; verChecking = true;
+    try{
+      const r = await fetch('version.json?t=' + Date.now(), {cache:'no-store'});
+      if(!r.ok) return;
+      const v = (await r.json()).version;
+      if(v && v !== APP_VER){
+        // Loop guard: auto-reload at most once per new version. If the page we get back is still
+        // the old one (cache / version.json not matching), show the banner instead of reloading again.
+        let tried = null; try{ tried = sessionStorage.getItem('asddReloadFor'); }catch(_){}
+        if(!dirty.size && !busy && tried !== v){ try{ sessionStorage.setItem('asddReloadFor', v); }catch(_){} reloadFresh(); }
+        else showUpdateBanner();
+      }
+    }catch(e){ /* offline – try again later */ }
+    finally{ verChecking = false; }
+  }
+  checkVersion();
+  setInterval(checkVersion, 2 * 60 * 1000);
+  document.addEventListener('visibilitychange', () => { if(document.visibilityState === 'visible') checkVersion(); });
+  window.addEventListener('pageshow', e => { if(e.persisted) checkVersion(); });
+  /* ---------- Admin ---------- */
+  // BLO Supervisors of AC-39 Rajinder Nagar and their parts (from the BLO / Supervisor list 2026)
+  const AEROS = [
+    ['DEEPAK MATHUR, BLO Supervisor', 1, 12], ['SHABBIR ALAM, BLO Supervisor', 13, 24], ['SHYAM SUNDER, BLO Supervisor', 25, 36],
+    ['SANJAY KUMAR, BLO Supervisor', 37, 48], ['ANOOP TOPPO, BLO Supervisor', 49, 60], ['DINESH KUMAR MEENA, BLO Supervisor', 61, 72],
+    ['SHIV KUMAR YADAV, BLO Supervisor', 73, 84], ['SUNIL MEHTO, BLO Supervisor', 85, 96], ['AMARJEET KUMAR, BLO Supervisor', 97, 108],
+    ['RAMESH KUMAR, BLO Supervisor', 109, 120], ['MANOJ KUMAR, BLO Supervisor', 121, 132], ['SANJEEV KUMAR, BLO Supervisor', 133, 144],
+    ['ANJALI KUSHWAHA, BLO Supervisor', 145, 151]
+  ].map(([name, from, to], i) => ({ id: String(i), name, from, to }));
+  let viewer = null;                       // null = Admin (all BLOs), otherwise one Supervisor
+  $('aeroSel').insertAdjacentHTML('beforeend', AEROS.map(a => `<option value="${a.id}">${esc(a.name)} — PS ${a.from} to ${a.to}</option>`).join(''));
+  let admList = [], admSort = 'ps', admAsc = true;
+  const ss = { get(k){ try{ return sessionStorage.getItem(k); }catch(e){ return null; } }, set(k,v){ try{ sessionStorage.setItem(k,v); }catch(e){} }, del(k){ try{ sessionStorage.removeItem(k); }catch(e){} } };
+
+  function showAdmin(on){
+    $('adminView').classList.toggle('hide', !on);
+    $('selPanel').classList.toggle('hide', on);
+    $('work').classList.toggle('hide', on || !cur);
+    $('savebar').style.display = (!on && cur) ? 'block' : 'none';
+    $('adminBtn').classList.toggle('hide', on); $('aeroBtn').classList.toggle('hide', on);
+    $('admTitle').textContent = viewer ? `${viewer.name} · PS ${viewer.from}–${viewer.to}` : 'Admin · BLO-wise progress';
+    $('admQ').value = ''; $('admF').value = ''; $('admOrd').value = 'asc'; $('admOrd').classList.add('hide'); remSum = null;
+    if(on) loadAdmin();
+    toTop();
+  }
+  $('aeroBtn').addEventListener('click', () => {
+    const last = ss.get('asdd_aero'); $('aeroSel').value = last || ''; $('aerr').textContent = '';
+    $('aeroModal').classList.remove('hide'); $('aeroSel').focus();
+  });
+  $('acancel').addEventListener('click', () => $('aeroModal').classList.add('hide'));
+  $('aeroForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const a = AEROS.find(x => x.id === $('aeroSel').value);
+    if(!a){ $('aerr').textContent = 'Please select your name.'; return; }
+    ss.set('asdd_aero', a.id); viewer = a; $('aeroModal').classList.add('hide'); closePS(); showAdmin(true);
+  });
+  $('adminBtn').addEventListener('click', () => { viewer = null; closePS(); showAdmin(true); });
+  $('admExit').addEventListener('click', () => { if(viewer) ss.del('asdd_aero'); viewer = null; closePS(); showAdmin(false); });
+  $('admRefresh').addEventListener('click', () => psCur ? openPS(psCur.ps) : loadAdmin());
+
+  // Admin progress mode: '' = re-verification progress, 'rem' = Remarks progress (Residing electors whose Remarks are filled)
+  let admMode = '', admSum = {}, remSum = null, remBusy = false;
+  const fmt = v => Number(v).toLocaleString('en-IN');
+  const MAIN_HEAD = [['ps','PS No'],['blo','BLO Name'],['part','Part Name'],['n','ASDD Total'],['done','Completed'],['pct','Progress'],
+    ['residing','Residing'],['notResiding','ASDD'],['f6yes','Form-6 Yes'],['f6no','Form-6 No']];
+  const REM_HEAD  = [['ps','PS No'],['blo','BLO Name'],['part','Part Name'],['rN','Residing (Remarks needed)'],['rDone','Remarks Filled'],
+    ['rPct','Remarks Progress'],['rPend','Remarks Pending'],['f6yesR','Form-6 Yes'],['f6noR','Form-6 No']];
+  // Keys used by filters / sort / overall bar for the current mode
+  const MK = () => admMode ? { n:'rN', d:'rDone', p:'rPct' } : { n:'n', d:'done', p:'pct' };
+
+  // Remarks counts per PS. Uses the Apps Script action "remsummary" if it is deployed;
+  // otherwise reads each PS's entries one by one (slower, but needs no script change).
+  async function loadRemSum(){
+    try{
+      const r = await backendGet(URL_ + '?action=remsummary');
+      if(r && r.ok && r.remarks && r.data) return r.data;
+    }catch(e){}
+    const out = {}, list = inScope(blos); let i = 0, doneN = 0;
+    const worker = async () => {
+      while(i < list.length){
+        const b = list[i++];
+        const sv = await backendGet(`${URL_}?action=get&ps=${b.ps}`).catch(() => null);
+        if(!sv || !sv.ok) throw new Error('could not read PS-' + b.ps);
+        const o = { residing:0, remarks:0, f6yes:0, f6no:0 };
+        for(const ep in (sv.data || {})){ const a = sv.data[ep] || [];
+          if(a[0]==='Residing'){ o.residing++; if(String(a[2]||'').trim()) o.remarks++; if(a[1]==='Yes') o.f6yes++; else if(a[1]==='No') o.f6no++; } }
+        out[b.ps] = o;
+        $('admMsg').textContent = `Reading remarks… ${++doneN} of ${list.length} BLOs`;
+      }
+    };
+    await Promise.all([worker(), worker(), worker(), worker()]);
+    return out;
+  }
+
+  async function loadAdmin(){
+    $('admMsg').textContent = 'Loading…';
+    admSum = {};
+    if(!hasBackend) $('admMsg').textContent = 'Google Sheet link not set in config.js.';
+    else try{
+      const r = await backendGet(URL_ + '?action=summary');
+      if(!r.ok) throw new Error(r.error); admSum = r.data || {};
+      if(admMode==='rem'){
+        if(remBusy) return; remBusy = true;
+        try{ remSum = await loadRemSum(); } finally{ remBusy = false; }
+      }
+      $('admMsg').textContent = 'Updated ' + new Date().toLocaleTimeString();
+    }catch(e){ $('admMsg').textContent = 'Could not read data: ' + e.message; }
+    buildAdmList();
+  }
+  function buildAdmList(){
+    admList = blos.map(b => { const s = admSum[b.ps] || {}, done = s.done||0, r = (remSum && remSum[b.ps]) || {};
+      const rN = r.residing != null ? r.residing : (s.residing||0), rDone = r.remarks||0;
+      return {...b, done, started: s.started != null ? s.started : done, pct: b.n ? done/b.n*100 : 0, residing:s.residing||0, notResiding:s.notResiding||0, f6yes:s.f6yes||0, f6no:s.f6no||0, frozen:!!s.frozen,
+        rN, rDone, rPend: rN - rDone, rPct: rN ? rDone/rN*100 : 100, f6yesR: r.f6yes != null ? r.f6yes : (s.f6yes||0), f6noR: r.f6no != null ? r.f6no : 0}; });
+    drawOverall(); drawAdmin();
+  }
+  function drawOverall(){
+    const scope = inScope(admList), who = viewer ? viewer.name.split(',')[0] + ' – ' : '';
+    const T = k => scope.reduce((a,b) => a + b[k], 0);
+    if(admMode==='rem'){
+      const tot = T('rN'), dn = T('rDone'), pct = tot ? dn/tot*100 : 0;
+      $('ovLbl').textContent = `${who}Remarks progress · ${fmt(dn)} of ${fmt(tot)} Residing electors have Remarks · ${scope.length} BLOs`;
+      $('ovPct').textContent = pct.toFixed(1) + '%'; $('ovBar').style.width = pct + '%';
+      $('admStats').innerHTML = [
+        ['Residing electors', fmt(tot)], ['Remarks filled', `${fmt(dn)} (${pct.toFixed(1)}%)`], ['Remarks pending', fmt(tot - dn)],
+        ['BLOs with pending Remarks', scope.filter(b => b.rPend > 0).length], ['BLOs Remarks 100%', scope.filter(b => b.rN && b.rPend <= 0).length],
+        ['BLOs with no Residing', scope.filter(b => !b.rN).length]
+      ].map(([k,v]) => `<div class="stat"><div class="k">${k}</div><div class="v">${v}</div></div>`).join('');
+    }else{
+      const tot = T('n'), dn = T('done'), pct = tot ? dn/tot*100 : 0;
+      $('ovLbl').textContent = `${who}overall progress · ${fmt(dn)} of ${fmt(tot)} electors done · ${scope.length} BLOs`;
+      $('ovPct').textContent = pct.toFixed(1) + '%'; $('ovBar').style.width = pct + '%';
+      $('admStats').innerHTML = [
+        ['Total ASDD electors', fmt(tot)], ['Completed', `${fmt(dn)} (${pct.toFixed(1)}%)`],
+        ['BLOs not started', scope.filter(b => !b.started).length], ['BLOs in progress', scope.filter(b => b.started && b.done < b.n).length], ['BLOs 100% done', scope.filter(b => b.done >= b.n).length],
+        ['Residing', fmt(T('residing'))], ['Form-6 obtained', fmt(T('f6yes'))]
+      ].map(([k,v]) => `<div class="stat"><div class="k">${k}</div><div class="v">${v}</div></div>`).join('');
+    }
+  }
+  const inScope = list => viewer ? list.filter(b => b.ps >= viewer.from && b.ps <= viewer.to) : list;
+  function admFiltered(){
+    const q = $('admQ').value.trim().toUpperCase(), f = $('admF').value, K = MK();
+    // Remarks mode: "Not started" = Residing electors present but no Remarks yet; BLOs with no Residing count as Completed
+    // Normal mode: "Not started" = BLO has not filled even one field of any elector; "In progress" = something filled, not all complete
+    const begun = b => admMode ? b[K.d] : b.started;
+    return inScope(admList).filter(b => (!q || String(b.ps)===q || b.blo.toUpperCase().includes(q) || b.part.toUpperCase().includes(q))
+      && (!f || (f==='zero' && !begun(b) && b[K.n] > 0) || (f==='part' && begun(b) && b[K.d]<b[K.n])
+          || (f==='pzero' && !admMode && b.started && !b.done && b.n > 0)   // In Progress (ZERO): started, but 0 completed
+          || (f==='full' && b[K.d]>=b[K.n])))
+      .sort((a,b) => {
+        if(f==='part'){ const d = (a[K.p] - b[K.p]) * ($('admOrd').value==='desc' ? -1 : 1); return d || a.ps - b.ps; }
+        const x=a[admSort], y=b[admSort]; return (x>y?1:x<y?-1:0) * (admAsc?1:-1); });
+  }
+  const pbarCell = (pct, txt) => `<td><span class="pbar"><i style="width:${pct}%"></i></span>${txt != null ? txt : Math.floor(pct) + '%'}</td>`;
+  function drawAdmin(){
+    const list = admFiltered(), H = admMode ? REM_HEAD : MAIN_HEAD;
+    $('admHead').innerHTML = '<tr>' + H.map(([k,t]) => `<th data-s="${k}">${t}</th>`).join('') + '</tr>';
+    const first = b => `<td><a href="#" class="pslink" data-ps="${b.ps}" title="Open PS-${b.ps} entries">${b.ps}</a></td><td class="l">${esc(b.blo)}${b.frozen ? ' <span title="Entries frozen by BLO">🔒</span>' : ''}</td><td class="l">${esc(b.part)}</td>`;
+    $('admTb').innerHTML = admMode
+      ? list.map(b => `<tr class="${b.rN && !b.rDone ? 'zero' : ''}">${first(b)}
+          <td>${b.rN}</td><td>${b.rDone}</td>${pbarCell(b.rN ? b.rPct : 0, b.rN ? null : 'No Residing')}<td>${b.rPend ? '<b style="color:var(--err)">' + b.rPend + '</b>' : 0}</td><td>${b.f6yesR}</td><td>${b.f6noR}</td></tr>`).join('')
+      : list.map(b => `<tr class="${b.started?'':'zero'}">${first(b)}
+          <td>${b.n}</td><td>${b.done}</td>${pbarCell(b.pct)}
+          <td>${b.residing}</td><td>${b.notResiding}</td><td>${b.f6yes}</td><td>${b.f6no}</td></tr>`).join('');
+  }
+  $('admHead').addEventListener('click', e => { const th = e.target.closest('th'); if(!th) return;
+    const k = th.dataset.s; admAsc = admSort===k ? !admAsc : true; admSort = k; drawAdmin(); });
+  $('admMode').addEventListener('change', () => {
+    admMode = $('admMode').value; admSort = 'ps'; admAsc = true;
+    const lbl = admMode ? ['All BLOs','Remarks not started','Remarks in progress','','Remarks 100% done'] : ['All BLOs','Not started','In progress','In Progress (ZERO)','Completed 100%'];
+    [...$('admF').options].forEach((o, i) => o.textContent = lbl[i]);
+    const pz = $('admF').querySelector('option[value=pzero]'); pz.hidden = pz.disabled = !!admMode;   // only for normal progress
+    if(admMode && $('admF').value === 'pzero') $('admF').value = '';
+    if(admMode && !remSum) loadAdmin(); else buildAdmList();
+  });
+  // Ascending/Descending option appears only for "In progress" BLOs
+  $('admF').addEventListener('change', () => $('admOrd').classList.toggle('hide', $('admF').value !== 'part'));
+  $('admOrd').addEventListener('change', drawAdmin);
+  $('admQ').addEventListener('input', drawAdmin);
+  // PDF of the BLO list exactly as currently filtered (Not started / In progress / Completed / All)
+  $('admPdf').addEventListener('click', async () => {
+    const btn = $('admPdf'), old = btn.textContent;
+    btn.disabled = true; btn.textContent = 'Preparing…';
+    try{
+      await loadLibs('pdf');
+      const list = admFiltered(), fTxt = $('admF').selectedOptions[0].text, q = $('admQ').value.trim();
+      const T = k => list.reduce((a,b) => a + b[k], 0), K = MK(), tot = T(K.n), dn = T(K.d), R = admMode==='rem';
+      const doc = new window.jspdf.jsPDF({ orientation:'landscape', unit:'pt', format:'a4' });
+      const W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight();
+      doc.setFont('helvetica','bold'); doc.setFontSize(15);
+      doc.text(R ? 'Remarks Progress of Residing ASDD Electors – BLO-wise' : 'Status of Re-verification of ASDD Electors – BLO-wise', W/2, 36, { align:'center' });
+      doc.setFont('helvetica','normal'); doc.setFontSize(10);
+      doc.text(`District: CENTRAL   |   AC: 39 - RAJINDER NAGAR${viewer ? '   |   ' + viewer.name + ' (PS ' + viewer.from + '–' + viewer.to + ')' : ''}`, W/2, 54, { align:'center' });
+      doc.setFont('helvetica','bold');
+      doc.text(`BLOs: ${fTxt}${q ? ' · search "' + q + '"' : ''}  –  ${list.length} BLO(s)   |   ${R ? 'Residing electors' : 'ASDD electors'}: ${tot}   ${R ? 'Remarks filled' : 'Completed'}: ${dn} (${tot ? (dn/tot*100).toFixed(1) : 0}%)   Pending: ${tot - dn}`, W/2, 70, { align:'center' });
+      doc.setFont('helvetica','normal'); doc.setFontSize(8.5); doc.setTextColor(90);
+      doc.text(($('admF').value==='part' ? 'Order: ' + $('admOrd').selectedOptions[0].text + '   |   ' : '') + 'Generated: ' + new Date().toLocaleString('en-IN'), W/2, 83, { align:'center' }); doc.setTextColor(0);
+      doc.autoTable({
+        startY: 92, margin: { left: 24, right: 24, bottom: 30 },
+        head: R ? [['S.N.','PS No','BLO Name','Part Name','Residing','Remarks Filled','Remarks Pending','Remarks Progress','Form-6 Yes','Form-6 No']]
+                : [['S.N.','PS No','BLO Name','Part Name','ASDD Total','Completed','Pending','Progress','Residing','ASDD','Form-6 Yes','Form-6 No']],
+        body: !list.length ? [['', '', 'No BLOs in this filter', '', '', '', '', '', '', ''].concat(R ? [] : ['', ''])]
+          : R ? list.map((b,i) => [i+1, b.ps, b.blo + (b.frozen ? ' (Frozen)' : ''), b.part, b.rN, b.rDone, b.rPend, b.rN ? b.rPct : 'No Residing', b.f6yesR, b.f6noR])
+              : list.map((b,i) => [i+1, b.ps, b.blo + (b.frozen ? ' (Frozen)' : ''), b.part, b.n, b.done, b.n - b.done, b.pct, b.residing, b.notResiding, b.f6yes, b.f6no]),
+        foot: !list.length ? undefined
+          : R ? [['', '', 'TOTAL', '', tot, dn, tot - dn, tot ? dn/tot*100 : 0, T('f6yesR'), T('f6noR')]]
+              : [['', '', 'TOTAL', '', tot, dn, tot - dn, tot ? dn/tot*100 : 0, T('residing'), T('notResiding'), T('f6yes'), T('f6no')]],
+        styles: { fontSize: 8, cellPadding: 3, valign: 'middle', halign: 'center', lineColor: [213,219,227], lineWidth: 0.4 },
+        headStyles: { fillColor: [26,95,85], textColor: 255, fontStyle: 'bold' },
+        footStyles: { fillColor: [230,237,241], textColor: 0, fontStyle: 'bold' },
+        alternateRowStyles: { fillColor: [242,246,248] },
+        columnStyles: { 0:{cellWidth:30}, 1:{cellWidth:40}, 2:{halign:'left'}, 3:{halign:'left'}, 7:{cellWidth:100} },
+        // Progress column: green bar + % instead of plain text
+        didParseCell: c => {
+          if(c.column.index === 7 && c.section !== 'head' && typeof c.cell.raw === 'number') c.cell.text = [''];
+          // BLO name: bigger, bold, white on red
+          if(c.column.index === 2 && c.section === 'body' && list.length){
+            c.cell.styles.fontSize = 10; c.cell.styles.fontStyle = 'bold';
+            c.cell.styles.fillColor = [200,35,35]; c.cell.styles.textColor = 255;
+          }
+        },
+        didDrawCell: c => {
+          if(c.column.index !== 7 || c.section === 'head' || typeof c.cell.raw !== 'number') return;
+          const p = Math.max(0, Math.min(100, c.cell.raw)), x = c.cell.x + 5, bw = c.cell.width - 42, bh = 6, y = c.cell.y + c.cell.height/2 - bh/2;
+          doc.setFillColor(227,232,238); doc.roundedRect(x, y, bw, bh, 3, 3, 'F');
+          if(p > 0){ doc.setFillColor(30,122,67); doc.roundedRect(x, y, Math.max(bw * p/100, 3), bh, 3, 3, 'F'); }
+          doc.setFontSize(8); doc.setFont('helvetica', c.section === 'foot' ? 'bold' : 'normal'); doc.setTextColor(0);
+          doc.text((c.section === 'foot' ? (Math.floor(p*10)/10).toFixed(1) : Math.floor(p)) + '%', c.cell.x + c.cell.width - 5, c.cell.y + c.cell.height/2 + 3, { align:'right' });
+        },
+        didDrawPage: () => { doc.setFontSize(8); doc.setTextColor(120);
+          doc.text('Page ' + doc.internal.getNumberOfPages(), W - 24, H - 14, { align:'right' }); doc.setTextColor(0); }
+      });
+      const d = new Date(), tag = { '':'All', zero:'Not_started', part:'In_progress', pzero:'In_progress_ZERO', full:'Completed' }[$('admF').value];
+      doc.save(`${R ? 'Remarks_' : ''}BLOs_${tag}${viewer ? '_PS' + viewer.from + '-' + viewer.to : ''}_${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}.pdf`);
+    }catch(e){ alert('Could not make the PDF: ' + e.message); }
+    finally{ btn.disabled = false; btn.textContent = old; }
+  }); $('admF').addEventListener('change', drawAdmin);
+
+  /* ---------- Admin: one PS's entries ---------- */
+  let psCur = null, psRows = [], psSaved = {};
+  $('admTb').addEventListener('click', e => { const a = e.target.closest('a.pslink'); if(!a) return; e.preventDefault(); openPS(Number(a.dataset.ps)); });
+  function closePS(){ psCur = null; $('admPSView').classList.add('hide'); $('admListView').classList.remove('hide'); }
+  $('psBack').addEventListener('click', () => { closePS(); drawAdmin(); toTop(); });
+  async function openPS(ps){
+    psCur = blos.find(b => b.ps === ps); if(!psCur) return;
+    $('admListView').classList.add('hide'); $('admPSView').classList.remove('hide'); toTop();
+    $('psTitle').textContent = `PS-${psCur.ps} – ${psCur.blo}`;
+    $('psMeta').textContent = `Part ${psCur.ps} – ${psCur.part} · ${psCur.n} electors in ASDD list · loading…`;
+    $('psTb').innerHTML = ''; $('psStats').innerHTML = '';
+    try{
+      const [data, sv] = await Promise.all([
+        getJSONRetry(`data/g${Math.floor((ps-1)/19)+1}.json`).then(g => g[ps]),
+        hasBackend ? backendGet(`${URL_}?action=get&ps=${ps}`) : Promise.resolve({ok:true, data:{}})
+      ]);
+      if(!psCur || psCur.ps !== ps) return;
+      if(!sv.ok) throw new Error(sv.error || 'Server error');
+      psRows = data; psSaved = {}; for(const ep in (sv.data || {})) psSaved[ep] = norm(sv.data[ep]);
+      $('psMeta').textContent = `Part ${psCur.ps} – ${psCur.part} · live from database at ${new Date().toLocaleTimeString()}`;
+      const done = psRows.filter(r => isDone(r[1])), cnt = (k, v) => done.filter(r => psSaved[r[1]][k] === v).length;
+      $('psStats').innerHTML = [
+        ['Total electors', psRows.length], ['Submitted', `${done.length} (${psRows.length ? (done.length/psRows.length*100).toFixed(0) : 0}%)`],
+        ['Pending', psRows.length - done.length], ['Residing', cnt(0,'Residing')], ['ASDD', cnt(0,'ASDD')], ['Form-6 Yes', cnt(1,'Yes')], ['Details complete', done.filter(r => isComplete(psSaved[r[1]])).length]
+      ].map(([k,v]) => `<div class="stat"><div class="k">${k}</div><div class="v">${v}</div></div>`).join('');
+      drawPS();
+    }catch(e){ $('psMeta').textContent = 'Could not read data: ' + e.message + ' – tap Refresh to try again.'; }
+  }
+  const isDone = ep => !!(psSaved[ep] && psSaved[ep][0]);
+  function psFiltered(){
+    const q = $('psQ').value.trim().toUpperCase(), f = $('psF').value, rf = $('psR').value;
+    return psRows.filter(r => { const d = isDone(r[1]);
+      if(f==='done' && !d) return false; if(f==='pending' && d) return false;
+      if(rf && (!d || psSaved[r[1]][0] !== rf)) return false;
+      return !q || r[2].toUpperCase().includes(q) || r[1].includes(q) || String(r[0])===q || String(r[6])===q; });
+  }
+  function drawPS(){
+    const list = psFiltered();
+    const na = '<span class="ans-none">—</span>';
+    $('psTb').innerHTML = list.map(r => { const a = psSaved[r[1]] || norm([]), d = isDone(r[1]), ok = d && isComplete(a);
+      const v = (x, applies) => applies ? (x ? esc(x) : '<b style="color:var(--err)">Required</b>') : na;
+      const res = a[0] ? `<span class="${a[0]==='Residing'?'ans-r':'ans-nr'}">${esc(a[0])}</span>` : na;
+      const R = a[0]==='Residing', N = R && a[1]==='No';
+      return `<tr class="${ok?'done':''}"><td>${r[0]}</td><td class="l">${esc(r[2])}</td><td>${esc(r[1])}</td><td>${esc(r[3])}</td><td class="l">${esc(r[4])}</td><td>${esc(r[6])}</td>
+        <td>${a[2] ? esc(a[2]) : d ? v('', true) : na}</td><td><span class="tag ${tagCls(r[9])}">${esc(r[9])}</span></td><td>${a[3] ? esc(a[3]) : d ? v('', true) : na}</td><td>${res}</td>
+        <td class="rem-cell">${v(a[4], R)}</td><td>${R ? (a[1] ? '<b>' + esc(a[1]) + '</b>' : v('', true)) : na}</td><td class="rem-cell">${v(a[5], N)}</td><td class="rem-cell">${v(a[6], N)}</td><td>${v(a[7], N)}</td></tr>`; }).join('');
+    $('psNone').classList.toggle('hide', list.length > 0);
+    $('psShown').textContent = `Showing ${list.length} of ${psRows.length}`;
+  }
+  let pt; $('psQ').addEventListener('input', () => { clearTimeout(pt); pt = setTimeout(drawPS, 150); });
+  $('psF').addEventListener('change', drawPS); $('psR').addEventListener('change', drawPS);
+  // All Residing PDF: every Residing elector with all re-verification details, PS-wise, for the BLOs in scope
+  $('admRemPdf').addEventListener('click', async () => {
+    const btn = $('admRemPdf'), old = btn.textContent;
+    if(!hasBackend){ $('admMsg').textContent = 'Google Sheet link not set in config.js.'; return; }
+    btn.disabled = true; btn.textContent = 'Reading…';
+    try{
+      await loadLibs('pdf');
+      const list = inScope(blos).slice().sort((a,b) => a.ps - b.ps), body = [];
+      let full = 0;
+      const add = (b, sn, name, ep, x) => { const a = norm(x), ok = isComplete(a); if(ok) full++;
+        body.push([body.length+1, b.ps, b.blo, Number(sn) || sn, name, ep, a[2] || 'NOT FILLED', a[3] || 'NOT FILLED', a[4] || 'NOT FILLED', a[1] || 'NOT FILLED',
+          a[1]==='No' ? (a[5] || 'NOT FILLED') : '-', a[1]==='No' ? (a[6] || 'NOT FILLED') : '-', a[1]==='No' ? (a[7] || 'NOT FILLED') : '-']); };
+      // FAST path: one server call returns every Residing elector (Apps Script action "resall")
+      $('admMsg').textContent = 'Reading Residing electors…';
+      const all = await backendGet(`${URL_}?action=resall`).catch(() => null);
+      if(all && all.ok && all.resall){
+        for(const b of list){ const rs = (all.data || {})[String(b.ps)] || [];
+          rs.slice().sort((x,y) => Number(x[0]) - Number(y[0])).forEach(r => add(b, r[0], r[1], r[2], r[3])); }
+      }else{
+        // Fallback: read each PS (12 at a time)
+        const groups = {}, saved = {}; let i = 0, doneN = 0;
+        const grp = ps => { const g = Math.floor((ps-1)/19)+1; return groups[g] || (groups[g] = getJSONRetry(`data/g${g}.json`)); };
+        const worker = async () => {
+          while(i < list.length){
+            const b = list[i++];
+            const sv = await backendGet(`${URL_}?action=get&ps=${b.ps}`).catch(() => null);
+            if(!sv || !sv.ok) throw new Error('could not read PS-' + b.ps + ' – try again');
+            saved[b.ps] = sv.data || {};
+            $('admMsg').textContent = `Reading… ${++doneN} of ${list.length} BLOs`;
+          }
+        };
+        await Promise.all(Array.from({length: 12}, worker));
+        for(const b of list){
+          const rs = (await grp(b.ps))[b.ps] || [], sv = saved[b.ps];
+          for(const r of rs){ const a = sv[r[1]] && norm(sv[r[1]]); if(a && a[0] === 'Residing') add(b, r[0], r[2], r[1], a); }
+        }
+      }
+      const doc = new window.jspdf.jsPDF({ orientation:'landscape', unit:'pt', format:'a4' });
+      const W = doc.internal.pageSize.getWidth(), H = doc.internal.pageSize.getHeight();
+      doc.setFont('helvetica','bold'); doc.setFontSize(15);
+      doc.text('Residing ASDD Electors – Re-verification Details, PS-wise', W/2, 36, { align:'center' });
+      doc.setFontSize(10);
+      doc.text(`District: CENTRAL   |   AC: 39 - RAJINDER NAGAR${viewer ? '   |   ' + viewer.name + ' (PS ' + viewer.from + '–' + viewer.to + ')' : ''}`, W/2, 54, { align:'center' });
+      doc.text(`Residing electors: ${body.length}   |   Details complete: ${full}   |   Details pending: ${body.length - full}`, W/2, 70, { align:'center' });
+      doc.setFontSize(8.5); doc.setTextColor(90);
+      doc.text('Generated: ' + new Date().toLocaleString('en-IN'), W/2, 83, { align:'center' }); doc.setTextColor(0);
+      doc.autoTable({
+        startY: 92, margin: { left: 16, right: 16, bottom: 30 },
+        head: [['#','PS','BLO Name','S.N.','Name of the Elector','EPIC No','Visit dates (Enum.)','Visit dates (Re-verif.)','Reason EF not submitted','Form-6','Reason Form-6 not obtained','Refused by (Name)','Refused by (Mobile)']],
+        body: body.length ? body : [['','','','','No Residing electors','','','','','','','','']],
+        styles: { fontSize: 6.8, fontStyle: 'bold', textColor: 0, cellPadding: 2.2, valign: 'middle', lineColor: [213,219,227], lineWidth: 0.4, overflow: 'linebreak' },
+        headStyles: { fillColor: [26,95,85], textColor: 255, fontStyle: 'bold', halign: 'center' },
+        columnStyles: { 0:{cellWidth:24,halign:'center'}, 1:{cellWidth:24,halign:'center'}, 2:{cellWidth:56}, 3:{cellWidth:26,halign:'center'},
+          4:{cellWidth:86}, 5:{cellWidth:58}, 6:{cellWidth:52}, 7:{cellWidth:52}, 8:{cellWidth:'auto'}, 9:{cellWidth:34,halign:'center'},
+          10:{cellWidth:'auto'}, 11:{cellWidth:58}, 12:{cellWidth:52,halign:'center'} },
+        didParseCell: d => { if(d.section==='body' && d.cell.raw==='NOT FILLED'){ d.cell.styles.textColor=[176,58,46]; } },
+        didDrawPage: () => { doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(120); doc.text('Page ' + doc.internal.getNumberOfPages(), W - 24, H - 14, { align:'right' }); doc.setTextColor(0); }
+      });
+      doc.save(`ASDD_All_Residing_${new Date().toISOString().slice(0,10)}.pdf`);
+      $('admMsg').textContent = `PDF ready – ${body.length} Residing electors, ${full} with complete details.`;
+    }catch(e){ $('admMsg').textContent = 'Could not make PDF: ' + e.message; }
+    finally{ btn.disabled = false; btn.textContent = old; }
+  });
+  /* ---- Excel / PDF downloads (libraries load only when first needed) ---- */
+  const LIBS = {
+    xlsx: ['https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js'],
+    pdf:  ['https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js',
+           'https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js']
+  };
+  const loaded = {};
+  function loadScript(src){
+    return loaded[src] || (loaded[src] = new Promise((res, rej) => {
+      const el = document.createElement('script'); el.src = src; el.onload = res;
+      el.onerror = () => { delete loaded[src]; rej(new Error('could not load download tool – check internet')); };
+      document.head.appendChild(el);
+    }));
+  }
+  async function loadLibs(k){ for(const src of LIBS[k]) await loadScript(src); }
+  const FILTER_NAME = { done:'submitted', '':'all', pending:'pending' };
+  const HEAD = ['S.No','Name of the Elector','EPIC No','Relation Type','Relation Name','Part No','Serial No','Age','Gender',
+    'Date(s) of visit by BLO during Enumeration Phase','Status of Elector in the ASDD List','Date(s) of visit by BLO during Re-verification',
+    'Status of ASDD Elector during Re-verification by BLOs (Residing/ASDD)','If Found Residing, Reason for not submitting EF during Enumeration Phase',
+    'If found Residing & eligible for Enrolment, Form-6 Obtained or Not (Yes/No)','If found Residing & eligible for Enrolment, but Form-6 Not obtained, Reason thereof',
+    'If Form-6 Refused, Whether refused by Elector/Relative (Mention Name)','If Form-6 Refused, Whether refused by Elector/Relative (Mention Mobile Number)'];
+  function exportRows(){ return psFiltered().map(r => { const a = psSaved[r[1]] || norm([]);
+    return [Number(r[0]), r[2], r[1], r[3], r[4], r[5], Number(r[6]) || r[6], Number(r[7]) || r[7], r[8], a[2], r[9], a[3], a[0], a[4], a[1], a[5], a[6], a[7]]; }); }
+  function exportInfo(){
+    const done = psRows.filter(r => isDone(r[1])), c = (k, v) => done.filter(r => psSaved[r[1]][k] === v).length;
+    return { name: `PS-${psCur.ps}_${psCur.blo}_ASDD_${FILTER_NAME[$('psF').value]}`.replace(/[^\w\-]+/g,'_'),
+      when: new Date().toLocaleString('en-IN'), total: psRows.length, done: done.length, pending: psRows.length - done.length,
+      res: c(0,'Residing'), nres: c(0,'ASDD'), yes: c(1,'Yes'), no: c(1,'No'),
+      resNo: done.filter(r => psSaved[r[1]][0]==='Residing' && psSaved[r[1]][1]==='No').length,
+      view: $('psF').selectedOptions[0].text + ($('psR').value ? ' · ' + $('psR').value : '') + ($('psQ').value.trim() ? ` · search "${$('psQ').value.trim()}"` : '') };
+  }
+  async function withBusy(btn, label, fn){
+    const old = btn.textContent; btn.disabled = true; btn.textContent = label;
+    try{ await fn(); }
+    catch(e){ $('psMeta').textContent = 'Download failed: ' + e.message; }
+    finally{ btn.disabled = false; btn.textContent = old; }
+  }
+  $('psXlsx').addEventListener('click', () => psCur && withBusy($('psXlsx'), 'Preparing…', async () => {
+    await loadLibs('xlsx');
+    const I = exportInfo(), rows = exportRows(), wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.aoa_to_sheet([HEAD, ...rows]);
+    ws['!cols'] = [6,26,14,10,24,7,8,6,7,22,20,22,18,40,14,40,24,16].map(w => ({ wch: w }));
+    ws['!autofilter'] = { ref: XLSX.utils.encode_range({ s:{r:0,c:0}, e:{r:Math.max(rows.length,1), c:HEAD.length-1} }) };
+    XLSX.utils.book_append_sheet(wb, ws, 'Entries');
+    const sum = XLSX.utils.aoa_to_sheet([
+      ['Status of Re-verification of ASDD Electors'], [],
+      ['District','CENTRAL'], ['AC','39 – RAJINDER NAGAR'], ['Part / PS No', psCur.ps], ['Part Name', psCur.part], ['BLO Name', psCur.blo],
+      ['Rows in this file', rows.length + ' (' + I.view + ')'], ['Downloaded on', I.when], [],
+      ['Total electors in ASDD list', I.total], ['Submitted', I.done], ['Pending', I.pending],
+      ['Residing', I.res], ['ASDD', I.nres], ['Form-6 obtained: Yes', I.yes], ['Form-6 obtained: No', I.no],
+      ['Residing but Form-6 not obtained', I.resNo]
+    ]);
+    sum['!cols'] = [{ wch: 28 }, { wch: 40 }];
+    XLSX.utils.book_append_sheet(wb, sum, 'Summary');
+    XLSX.writeFile(wb, I.name + '.xlsx');
+  }));
+  /* ---------- Daily Report (AC-level PDF for the district) ---------- */
+  const AC_ASDD_TOTAL = 53859;
+  // Signature block: "SDM/ERO, AC-39 RAJINDER NAGAR" (text)
+  const ERO_SIGN = null;   // no signature image for AC-39 – a text line is printed instead  // fixed: ASDD cases in AC-39
+  $('dailyBtn').addEventListener('click', async () => {
+    const btn = $('dailyBtn'), old = btn.textContent;
+    if(!hasBackend){ alert('Google Sheet link not set in config.js.'); return; }
+    btn.disabled = true; btn.textContent = 'Preparing…';
+    try{
+      const [sv, sign] = await Promise.all([
+        backendGet(URL_ + '?action=summary', n => { btn.textContent = `Server busy, retrying (${n})…`; }),
+        Promise.resolve(ERO_SIGN),
+        loadLibs('pdf')
+      ]);
+      if(!sv.ok) throw new Error(sv.error || 'Server error');
+      const sum = sv.data || {};
+      let covered = 0, f6 = 0, residing = 0;
+      blos.forEach(b => { const x = sum[b.ps] || {}; covered += x.done || 0; f6 += x.f6yes || 0; residing += x.residing || 0; });
+      const matched = AC_ASDD_TOTAL - residing;     // Match = all ASDD cases except those found Residing
+      const mismatch = residing;                     // Mismatch = cases found Residing
+
+      const d = new Date();
+      const dateTxt = `${d.getDate()} ${d.toLocaleString('en-US', {month:'short'}).toLowerCase()} ${String(d.getFullYear()).slice(-2)}`;
+
+      const doc = new window.jspdf.jsPDF({ orientation:'landscape', unit:'pt', format:'a4' });
+      doc.setFont('helvetica','bold'); doc.setFontSize(11);
+      doc.text('Plz share progress on re-verification of your district, AC wise: -', 421, 80, { align:'center' });
+      doc.text('Name of the District', 52, 111);
+      doc.text('central', 207, 111);
+      doc.text('date-' + dateTxt, 371, 111);
+
+      doc.autoTable({
+        startY: 129, margin: { left: 49, right: 55 }, theme: 'grid', tableWidth: 738,
+        head: [['Sr No.', 'AC No.', 'AC Name', 'Number of ASDD cases in AC', 'Number of ASDD cases covered in re-verification',
+                'Number of cases found correct and matches the report of ASDD ( prepared during enumeration phase)',
+                'Number of cases contradicting/ Mismatch in the report of ASDD ( prepared during enumeration phase)',
+                'Number of ASDD from whom form-6 obtained']],
+        body: [[1, 39, 'RAJINDER NAGAR', AC_ASDD_TOTAL, covered, matched, mismatch, f6]],
+        styles: { font:'times', fontSize:10, textColor:0, lineColor:0, lineWidth:0.8, cellPadding:{top:2,right:3,bottom:2,left:3}, valign:'top' },
+        headStyles: { fillColor:false, fontStyle:'bold', halign:'left', minCellHeight:104 },
+        bodyStyles: { fontStyle:'bold', font:'helvetica', fontSize:10.5 },
+        columnStyles: { 0:{cellWidth:118, halign:'right'}, 1:{cellWidth:38, halign:'right'}, 2:{cellWidth:88, halign:'left'},
+                        3:{cellWidth:79, halign:'right'}, 4:{cellWidth:86, halign:'right'}, 5:{cellWidth:110, halign:'right'},
+                        6:{cellWidth:109, halign:'right'}, 7:{cellWidth:110, halign:'right'} },
+        didParseCell: c => { if(c.section === 'head') c.cell.styles.halign = 'left'; }
+      });
+
+      // Signature block text
+      const y = doc.lastAutoTable.finalY + 32;
+      doc.setFont('helvetica','bold'); doc.setFontSize(11);
+      doc.text('SDM/ERO', 673, y + 80, { align:'center' });
+      doc.text('AC-39 RAJINDER NAGAR', 673, y + 96, { align:'center' });
+
+      doc.save(`ASDD_report_AC39_${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}.pdf`);
+    }catch(e){
+      alert('Could not make the Daily Report: ' + e.message);
+    }finally{
+      btn.disabled = false; btn.textContent = old;
+    }
+  });
+  $('psPdf').addEventListener('click', () => psCur && withBusy($('psPdf'), 'Preparing…', async () => {
+    await loadLibs('pdf');
+    const I = exportInfo(), rows = exportRows();
+    const doc = new window.jspdf.jsPDF({ orientation: 'landscape', unit: 'pt', format: 'a4' });
+    const W = doc.internal.pageSize.getWidth();
+    doc.setFont('helvetica','bold'); doc.setFontSize(15); doc.text('Status of Re-verification of ASDD Electors', W/2, 36, { align:'center' });
+    doc.setFont('helvetica','normal'); doc.setFontSize(10);
+    doc.text(`District: CENTRAL   |   AC: 39 - RAJINDER NAGAR   |   Part/PS No: ${psCur.ps} - ${psCur.part}   |   BLO: ${psCur.blo}`, W/2, 54, { align:'center' });
+    doc.text(`Total: ${I.total}   Submitted: ${I.done}   Pending: ${I.pending}   Residing: ${I.res}   ASDD: ${I.nres}   Form-6 Yes: ${I.yes}   Form-6 No: ${I.no}`, W/2, 69, { align:'center' });
+    doc.setFontSize(8.5); doc.setTextColor(90);
+    doc.text(`Showing: ${I.view} (${rows.length} rows)   |   Downloaded: ${I.when}`, W/2, 82, { align:'center' }); doc.setTextColor(0);
+    const cols = [0,1,2,6,9,10,11,12,13,14,15,16,17];
+    doc.autoTable({
+      startY: 92, margin: { left: 18, right: 18, bottom: 30 },
+      head: [['S.N.','Name of the Elector','EPIC No.','Serial No','Visit dates (Enumeration)','Status in ASDD List','Visit dates (Re-verification)','Status (Residing/ASDD)','Reason EF not submitted','Form-6 Obtained','Reason Form-6 not obtained','Refused by (Name)','Refused by (Mobile)']],
+      body: rows.length ? rows.map(r => cols.map(i => r[i] === '' ? '-' : r[i])) : [['', 'No entries to show', '', '', '', '', '', '', '', '', '', '', '']],
+      styles: { fontSize: 6.8, cellPadding: 2.5, valign: 'middle', lineColor: [213,219,227], lineWidth: 0.4, overflow: 'linebreak' },
+      headStyles: { fillColor: [26,95,85], textColor: 255, fontStyle: 'bold', halign: 'center' },
+      alternateRowStyles: { fillColor: [242,246,248] },
+      columnStyles: { 0:{halign:'center',cellWidth:26}, 1:{cellWidth:78}, 2:{halign:'center',cellWidth:56}, 3:{halign:'center',cellWidth:32}, 4:{cellWidth:52}, 5:{halign:'center',cellWidth:54},
+        6:{cellWidth:52}, 7:{halign:'center',fontStyle:'bold',cellWidth:44}, 8:{cellWidth:'auto'}, 9:{halign:'center',fontStyle:'bold',cellWidth:36}, 10:{cellWidth:'auto'}, 11:{cellWidth:56}, 12:{halign:'center',cellWidth:52} },
+      didDrawPage: d => { doc.setFontSize(8); doc.setTextColor(120);
+        doc.text(`PS-${psCur.ps} ${psCur.blo} - Page ${doc.internal.getNumberOfPages()}`, W - 24, doc.internal.pageSize.getHeight() - 14, { align:'right' }); doc.setTextColor(0); }
+    });
+    doc.save(I.name + '.pdf');
+  }));
+
+  init().catch(e => { setMsg('Failed to start: '+e.message,'err'); alert('Website could not start: ' + e.message + '\nPlease check internet and reload the page.'); });
+})();
+</script>
+</body>
+</html>
