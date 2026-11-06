@@ -111,18 +111,25 @@ function doGet(e){
 }
 
 // Answers of one PS: { ok, data: { EPIC: [9 values] } }. Reads only that PS's rows.
+// PS -> contiguous runs of rows [[startIndex, length]], kept in the script cache so loading a Part
+// does not have to scan all 53,859 rows every time. Rebuilt when the row count changes.
+function psIndex_(sh, n){
+  const cache = CacheService.getScriptCache(), key = 'psidx_' + n, hit = cache.get(key);
+  if(hit) return JSON.parse(hit);
+  const psCol = sh.getRange(2, C.ps, n, 1).getDisplayValues(), idx = {};
+  let cur = null, s = 0;
+  for(let i = 0; i <= n; i++){
+    const p = i < n ? String(psCol[i][0]).trim() : null;
+    if(p !== cur){ if(cur) (idx[cur] || (idx[cur] = [])).push([s, i - s]); cur = p; s = i; }
+  }
+  try{ cache.put(key, JSON.stringify(idx), 21600); }catch(e){}
+  return idx;
+}
 function getPS_(ps){
   if(!ps) return { ok:false, error:'ps missing' };
   const sh = sh_(), n = lastRow_(sh) - 1, data = {};
   if(n < 1) return { ok:true, data:data };
-  const psCol = sh.getRange(2, C.ps, n, 1).getDisplayValues();
-  // contiguous runs of rows belonging to this PS
-  const runs = []; let s = -1;
-  for(let i = 0; i <= n; i++){
-    const hit = i < n && String(psCol[i][0]).trim() === ps;
-    if(hit && s < 0) s = i;
-    if(!hit && s >= 0){ runs.push([s, i - s]); s = -1; }
-  }
+  const runs = psIndex_(sh, n)[ps] || [];
   runs.forEach(function(r){
     const ep = sh.getRange(r[0] + 2, C.epic, r[1], 1).getDisplayValues();
     const v  = sh.getRange(r[0] + 2, C.R, r[1], 9).getDisplayValues();
@@ -272,7 +279,7 @@ function prefillFromSite(){
       const b = byPs[ps] || {};
       grp[ps].forEach(function(r){
         if(have[r[1]]) return;
-        const row = ['', DIST, AC_NO, AC_NAME, ps, b.part || '', b.blo || ''].concat(r.slice(0, 10));
+        const row = ['', DIST, AC_NO, AC_NAME, ps, b.part || '', b.blo || '', r[0], r[2], r[1]].concat(r.slice(3, 10));
         while(row.length < NCOL) row.push('');
         rows.push(row);
       });
@@ -287,4 +294,17 @@ function prefillFromSite(){
   SpreadsheetApp.flush();
   try{ CacheService.getScriptCache().remove('summary_v2'); }catch(e){}
   Logger.log('Added ' + rows.length + ' electors. Total rows now: ' + (lastRow_(sh) - 1));
+}
+
+// One-time repair (06-Nov-2026): the first prefill wrote EPIC into column I and Name into column J.
+// Swaps them back for rows where column I looks like an EPIC number. Safe to run again.
+function fixNameEpicColumns(){
+  const sh = sh_(), n = lastRow_(sh) - 1; if(n < 1) return;
+  const rng = sh.getRange(2, 9, n, 2), v = rng.getValues(); let fixed = 0;
+  for(let i = 0; i < n; i++){
+    if(/^[A-Z]{2,4}\d{5,8}$/.test(str_(v[i][0])) && !/^[A-Z]{2,4}\d{5,8}$/.test(str_(v[i][1]))){ const t = v[i][0]; v[i][0] = v[i][1]; v[i][1] = t; fixed++; }
+  }
+  rng.setValues(v); SpreadsheetApp.flush();
+  try{ CacheService.getScriptCache().remove('summary_v2'); }catch(e){}
+  Logger.log('Swapped Name/EPIC in ' + fixed + ' rows');
 }
